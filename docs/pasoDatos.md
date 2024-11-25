@@ -165,6 +165,7 @@ se muestra la data necesaria del userData de authStore
 
 ## AssignedTutorScreen
 ### Front pide studentId del authStore
+- Envia studentId a la api
 
 ### API
 Pide el tutor a firebase
