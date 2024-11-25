@@ -5,7 +5,7 @@ import { useRouter } from "expo-router";
 
 export default function PasswordScreen() {
   const [passwordInput, setPasswordInput] = useState("");
-  const { email, setPassword, login } = useAuthStore();
+  const { setPassword, login } = useAuthStore();
   const router = useRouter();
 
   const handleLogin = async () => {
@@ -22,9 +22,6 @@ export default function PasswordScreen() {
     <View className="bg-[#1B1E1A] p-8 flex flex-1 justify-center">
       <Text className="font-bold text-4xl flex gap-7 color-white">
         Ingrese su contraseña
-      </Text>
-      <Text className="font-normal text-lg color-white mt-4">
-        Correo: {email}
       </Text>
       <View className="mb-12"></View>
       <Text className="font-bold text-2xl color-white">Contraseña</Text>

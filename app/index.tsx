@@ -1,6 +1,6 @@
 import { Link } from 'expo-router';
 import { View, Text } from 'react-native';
-import { HomeIcon } from '@/components/random/Icons';
+import { HomeIcon } from '@/components/Icons';
 
 export default function HomeScreen() {
   return (
@@ -17,6 +17,12 @@ export default function HomeScreen() {
         </Link>
         <Link className='font-normal text-2xl text-white'  href="./prep/register">
           Register
+        </Link>
+        <Link className='font-normal text-2xl text-white'  href="./prep/profile">
+          Profile
+        </Link>
+        <Link className='font-normal text-2xl text-white'  href="./prep/assignedtutor">
+          AssignedTutor
         </Link>
       </View>
       <View className='bg-blue-400'>
