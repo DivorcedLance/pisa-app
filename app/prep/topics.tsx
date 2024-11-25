@@ -42,13 +42,13 @@ export default function TopicsScreen() {
       </View>
 
       {/* Lista de Cursos */}
-      <FlatList
+      {/* <FlatList
         data={topics}
         renderItem={({ item }) => renderCurso(item, 'Math')}
         keyExtractor={(item) => item.id.toString()}
         numColumns={2}
         contentContainerStyle="items-center"
-      />
+      /> */}
     </View>
   );
 }
