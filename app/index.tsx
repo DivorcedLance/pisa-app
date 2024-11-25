@@ -12,6 +12,15 @@ export default function HomeScreen() {
       <Link className='font-normal text-2xl text-white'  href="/teteo">
         Teteo
       </Link>
+      <Link className='font-normal text-2xl text-white'  href="/login">
+        Login
+      </Link>
+      <Link className='font-normal text-2xl text-white'  href="/main">
+        Main
+      </Link>
+      <Link className='font-normal text-2xl text-white'  href="/register">
+        Register
+      </Link>
     </View>
   );
 }
