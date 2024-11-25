@@ -1,6 +1,6 @@
 import { Link } from 'expo-router';
 import { View, Text } from 'react-native';
-import { HomeIcon } from '../components/Icons';
+import { HomeIcon } from '../components/random/Icons';
 
 export default function TeteoScreen() {
   return (

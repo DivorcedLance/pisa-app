@@ -1,26 +1,29 @@
 import { Link } from 'expo-router';
 import { View, Text } from 'react-native';
-import { HomeIcon } from '../components/Icons';
+import { HomeIcon } from '@/components/random/Icons';
 
 export default function HomeScreen() {
   return (
-    <View className='bg-green-400'>
+    <View className='flex gap-5'>
       <Text className='font-bold text-4xl flex gap-7'>
-        <HomeIcon />
-        Index
+        <HomeIcon /> Index
       </Text>
-      <Link className='font-normal text-2xl text-white'  href="/teteo">
-        Teteo
-      </Link>
-      <Link className='font-normal text-2xl text-white'  href="./prep/login">
-        Login
-      </Link>
-      <Link className='font-normal text-2xl text-white'  href="./prep/main">
-        Main
-      </Link>
-      <Link className='font-normal text-2xl text-white'  href="./prep/register">
-        Register
-      </Link>
+      <View className='bg-green-400'>
+        <Link className='font-normal text-2xl text-white'  href="./prep/login">
+          Login
+        </Link>
+        <Link className='font-normal text-2xl text-white'  href="./prep/main">
+          Main
+        </Link>
+        <Link className='font-normal text-2xl text-white'  href="./prep/register">
+          Register
+        </Link>
+      </View>
+      <View className='bg-blue-400'>
+        <Link className='font-normal text-2xl text-white'  href="./login/email">
+          Login
+        </Link>
+      </View>
     </View>
   );
 }

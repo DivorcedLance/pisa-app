@@ -1,6 +1,6 @@
 import { Link } from 'expo-router';
 import { View, Text, TextInput, Pressable } from 'react-native';
-import { HomeIcon } from '../../components/Icons';
+import { HomeIcon } from '../../components/random/Icons';
 
 export default function LoginScreen() {
     return (
@@ -16,8 +16,7 @@ export default function LoginScreen() {
                 <Text className='font-bold text-2xl text-center color-black'>Siguiente</Text>
             </Pressable>
 
-            <Link className='font-normal text-2xl text-white' href="/">
-        <HomeIcon /> Index
+            <Link className='font-normal text-2xl text-white' href="/"><HomeIcon /> Index
       </Link>
             
         </View>
