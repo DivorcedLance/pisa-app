@@ -21,6 +21,12 @@ export default function HomeScreen() {
       <Link className='font-normal text-2xl text-white'  href="./prep/register">
         Register
       </Link>
+      <Link className='font-normal text-2xl text-white'  href="./prep/profile">
+        Profile
+      </Link>
+      <Link className='font-normal text-2xl text-white'  href="./prep/assignedtutor">
+        AssignedTutor
+      </Link>
     </View>
   );
 }
