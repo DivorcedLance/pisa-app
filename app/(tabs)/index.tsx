@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { Image, StyleSheet, Platform, View, Text } from 'react-native';
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -15,6 +15,9 @@ export default function HomeScreen() {
           style={styles.reactLogo}
         />
       }>
+      <View className='bg-red-500'>
+        <Text className='font-bold text-9xl'>Test</Text>
+      </View>
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Welcome!</ThemedText>
         <HelloWave />
