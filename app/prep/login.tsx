@@ -1,6 +1,6 @@
 import { Link } from 'expo-router';
 import { View, Text, TextInput, Pressable } from 'react-native';
-import { HomeIcon } from '../../components/random/Icons';
+import { HomeIcon } from '@/components/Icons';
 
 export default function LoginScreen() {
     return (
