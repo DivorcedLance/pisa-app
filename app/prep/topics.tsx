@@ -11,18 +11,23 @@ const renderCurso = ({ item, course}: { item: any, course: String}) => (
           ? 'bg-[#BBC548]'
           : 'bg-[#0077A1]'
       }`} >
-        <Text className='text-center'>{item.nombre_corto_tema}</Text>
+        <Text className="text-white text-lg">{item.nombre_corto_tema}</Text>
     </TouchableOpacity>
 );
 
 export default function TopicsScreen() {
+    const courses = [
+        { id: 1, course: 'Math', name: 'Matemáticas' },
+        { id: 2, course: 'Science', name: 'Ciencias' },
+        { id: 3, course: 'Lect', name: 'Lectura' },
+    ];
     const topics = [
-        { id: 1, nombre_corto_tema: 'Álgebra' },
-        { id: 2, nombre_corto_tema: 'Geometría' },
-        { id: 3, nombre_corto_tema: 'Biología' },
-        { id: 4, nombre_corto_tema: 'Física' },
-        { id: 5, nombre_corto_tema: 'Literatura' },
-        { id: 6, nombre_corto_tema: 'Historia' },
+        { id: 1, course:'Math', nombre_corto_tema: 'Álgebra' },
+        { id: 2, course:'Math', nombre_corto_tema: 'Geometría' },
+        { id: 3, course:'Science', nombre_corto_tema: 'Biología' },
+        { id: 4, course:'Science', nombre_corto_tema: 'Física' },
+        { id: 5, course:'Lect', nombre_corto_tema: 'Literatura' },
+        { id: 6, course:'Lect', nombre_corto_tema: 'Historia' },
       ];
   return (
     <View className="flex-1 bg-backgroundPrimary">
