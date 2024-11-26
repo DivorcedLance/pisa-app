@@ -36,8 +36,11 @@ Pide ese student que tenga ese [email]
     phone:number,
     birthday: Date,
     password: String,
+    tutorId: String,
     classroom: String,
-    achievments: Achievement[]
+    achievments: Achievement[],
+    points: number,
+    level: String,
 };
 ```
 #### API guarda email y userData en authStore (ya sabes que me refiero a los metodos de firebase)
@@ -164,21 +167,22 @@ se muestra la data necesaria del userData de authStore
 - API reemplaza esto en los campos correspondientes de userData de authStore
 
 ## AssignedTutorScreen
-### Front pide studentId del authStore
-- Envia studentId a la api
+### Front pide tutorId del userData del authStore
+con el tutorId pide el tutor a la api
 
 ### API
 Pide el tutor a firebase
-`getTutorByStudentId`
+`getTutorByTutorId`
 ```json
 {
-    idTutor?: String,
-    codigo: String,
-    correoInstitucional: String,
+    code: String,
+    name: String,
+    lastname: String,
+    email: String,
     cargo: String,
-    aula: String,
-    telefono: number,
-    fechaNacimiento: Date
+    classroom: String,
+    phone: number,
+    birthday: Date
 }
 ```
 # Home
@@ -210,8 +214,9 @@ getTopicsByCourseName
 
 ```json
 {
-    idTopic: String
+    idTopic: String,
     title: String,
+    color: String
 }[]
 ```
 
@@ -228,10 +233,13 @@ getMultimediaContentByTopicId
 
 ```json
 {
-  topicName: String,
+  title: String,
   videoUrl: String,
-  description: String
+  description: String,
+  color: String
 }
 ```
 
 - Ejercicios
+#### Front pide a la api
+Pide una evaluacion
