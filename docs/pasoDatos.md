@@ -207,47 +207,72 @@ no hace nada
 ### Front
 Tiene opciones dependiendo de la opcion que pulsó previamente.
 Agarra el parametro obtenido y lo usa para pedir los temas del curso.
-Con los botones obtenidos, click a uno y pasa el idTopic como parametro al TypeContentScreen
 #### Front pide a la api
 pide los temas del curso
 #### Front envia a la api
 envia el nombre del curso
+#### Front pasa el tema seleccionado a TypeContentScreen
+
 ### API
 #### Api pide a firebase los temas 
 getTopicsByCourseName
 
 ```json
 {
-    idTopic: String,
-    title: String,
-    color: String
+    color: String,
+    evaluation: {
+      "basic": String,
+      "intermediate": String,
+      "advanced": String,
+    }
+    multimediaContent:{
+      descripcion: String,
+      videoUrl: String
+    },
+    title: String
 }[]
 ```
 
 ## TypeContentScreen
 ### Front
-Obtiene el parametro idTopic.
-Tiene dos opciones:
+Obtiene el parametro `tema`.
+Tiene dos opciones: (pasa el `tema` a los dos screens)
+
 - Contenido multimedia
+## MultimediaContentScreen
+Obtiene el parametro `tema`
+Agarra el atributo multimediaContent para la interfaz.
 #### Front pide a la api 
-pide a la api contenidos multimedia
+Pide la evaluacion correspondiente al nivel que tiene el student a la api
+#### Front envia a EvaluationScreen
+Envia la `evaluacion` como parametro
+
 ### API
-#### Api pide a firebase los contenidos multimedia
-getMultimediaContentByTopicId
+#### Api pide a firebase la evaluacion pedida
+getEvaluationById
 
 ```json
 {
-  title: String,
-  videoUrl: String,
-  description: String,
-  color: String
+  level: String,
+  questions: {
+    0: String,
+    1: String,
+    .
+    .
+    .
+  }
 }
-```
 
 - Ejercicios
+## EvaluationScreen
 ### FRONT
+Pide el level del userData del authStore
 #### Front pide a la api
-Pide una evaluacion enviando 
 
 ### API
 #### Api pide a firebase
+
+
+
+```
+- 
