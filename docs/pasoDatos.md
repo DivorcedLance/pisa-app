@@ -185,8 +185,8 @@ Pide el tutor a firebase
 ## HomeScreen
 ### Front
 Se le pide al authStore el nombre del userData
-Al presionar el boton del curso, se envia el nombre a la pagina ContentScreen
-para que muestre las opciones correspondientes
+Al presionar el boton del curso, pasa el nombre del curso al ContentScreen
+
 #### Front pide a la api
 Nada
 #### Front envia a la api
@@ -197,7 +197,41 @@ no hace nada
 
 ## ContentScreen
 ### Front
-Tiene opciones dependiendo de la opcion que pulsó previamente
-
+Tiene opciones dependiendo de la opcion que pulsó previamente.
+Agarra el parametro obtenido y lo usa para pedir los temas del curso.
+Con los botones obtenidos, click a uno y pasa el idTopic como parametro al TypeContentScreen
+#### Front pide a la api
+pide los temas del curso
+#### Front envia a la api
+envia el nombre del curso
 ### API
+#### Api pide a firebase los temas 
+getTopicsByCourseName
 
+```json
+{
+    idTopic: String
+    title: String,
+}[]
+```
+
+## TypeContentScreen
+### Front
+Obtiene el parametro idTopic.
+Tiene dos opciones:
+- Contenido multimedia
+#### Front pide a la api 
+pide a la api contenidos multimedia
+### API
+#### Api pide a firebase los contenidos multimedia
+getMultimediaContentByTopicId
+
+```json
+{
+  topicName: String,
+  videoUrl: String,
+  description: String
+}
+```
+
+- Ejercicios
