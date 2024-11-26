@@ -288,4 +288,12 @@ getQuestionsById
 }
 ```
 
-- 
+# Comunity
+## FrequentPostScreen
+
+## PostScreen
+
+## ComunityPostScreen
+
+## CreatePost
+
