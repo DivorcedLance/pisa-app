@@ -183,3 +183,21 @@ Pide el tutor a firebase
 ```
 # Home
 ## HomeScreen
+### Front
+Se le pide al authStore el nombre del userData
+Al presionar el boton del curso, se envia el nombre a la pagina ContentScreen
+para que muestre las opciones correspondientes
+#### Front pide a la api
+Nada
+#### Front envia a la api
+Nada
+
+### API
+no hace nada
+
+## ContentScreen
+### Front
+Tiene opciones dependiendo de la opcion que pulsó previamente
+
+### API
+
