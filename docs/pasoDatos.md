@@ -126,8 +126,11 @@ se muestra la data necesaria del userData de authStore
     email:String,
     phone:number,
     birthday: Date,
-    classroom: String,
-    achievments: Achievement[]
+    grade: String, //SACADO DEL CLASSROOMID QUE TIENE
+    seccion: String, // sacado del classroomId que tiene
+    achievments: Achievement[],
+    points: number,
+    level: String
 };
 ```
 ### Editar
@@ -179,8 +182,9 @@ Pide el tutor a firebase
     name: String,
     lastname: String,
     email: String,
-    cargo: String,
-    classroom: String,
+    position: String,
+    grade: String, //SACADO DEL CLASSROOMID
+    seccion: String, //SACADO DEL CLASSROOMID
     phone: number,
     birthday: Date
 }
@@ -241,5 +245,9 @@ getMultimediaContentByTopicId
 ```
 
 - Ejercicios
+### FRONT
 #### Front pide a la api
-Pide una evaluacion
+Pide una evaluacion enviando 
+
+### API
+#### Api pide a firebase
