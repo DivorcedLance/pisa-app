@@ -244,6 +244,7 @@ Obtiene el parametro `tema`
 Agarra el atributo multimediaContent para la interfaz.
 #### Front pide a la api 
 Pide la evaluacion correspondiente al nivel que tiene el student a la api
+Osea primero del userData del authStore saca el level del student y con eso saca el id de la evaluacion correspondiente y ese id lo pasa a la api
 #### Front envia a EvaluationScreen
 Envia la `evaluacion` como parametro
 
@@ -253,26 +254,30 @@ getEvaluationById
 
 ```json
 {
-  level: String,
   questions: {
-    0: String,
+    0: String, //es id de una question
     1: String,
     .
     .
     .
   }
 }
+```
 
 - Ejercicios
 ## EvaluationScreen
 ### FRONT
-Pide el level del userData del authStore
+Obtiene el parametro `evaluacion` y lo usa en la interfaz
 #### Front pide a la api
+Pide la solucion de una question
+#### Front envia a SolutionScreen
+Envia `solution` como parametro
 
 ### API
-#### Api pide a firebase
+#### Api pide a firebase la solucion
+getSolutionByQuestionId
 
 
 
-```
+
 - 
