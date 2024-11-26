@@ -267,17 +267,25 @@ getEvaluationById
 - Ejercicios
 ## EvaluationScreen
 ### FRONT
-Obtiene el parametro `evaluacion` y lo usa en la interfaz
+Obtiene el parametro `evaluacion`
 #### Front pide a la api
-Pide la solucion de una question
+Pide las preguntas del questionIds a la api
 #### Front envia a SolutionScreen
-Envia `solution` como parametro
+Envia el atributo solution como parametro
 
 ### API
-#### Api pide a firebase la solucion
-getSolutionByQuestionId
+#### Api pide a firebase las preguntas
+getQuestionsById
 
-
-
+```json
+{
+  correctAnswer: number,
+  options: String[],
+  questionImg: String,
+  score: number,
+  solution: String,
+  statement: String
+}
+```
 
 - 
