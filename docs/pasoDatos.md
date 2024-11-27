@@ -308,3 +308,22 @@ getQuestionsById
 
 # Virtual Asistant Chat Bot
 ## ChatBotScreen
+
+
+## EN CUANTO A LOS STORES, CREO QUE IDENTIFIQUÉ DOS
+
+courseStore:
+Gestionaría todo lo relacionado con los cursos y contenidos.
+Se encargaría de:
+Almacenar la lista de cursos y temas obtenidos de la API.
+Manejar las evaluaciones según el nivel del estudiante.
+
+{
+  courses: Course[],
+  selectedCourse: Course | null,
+  topics: Topic[],
+  selectedTopic: Topic | null,
+  evaluation: Evaluation | null,
+}
+
+y el uiStore, para las pantallas de cargando y mostrar notificaciones
