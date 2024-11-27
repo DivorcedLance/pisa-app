@@ -288,22 +288,28 @@ getQuestionsById
 ### FRONT
 
 ### API
+getPostsByType
 
-## PostScreen
-### FRONT
-
-### API
 
 ## ComunityPostScreen
 ### FRONT
 
 ### API
+getPostsByType
+
+getPostById(postId)
+
+## PostScreen
+### FRONT
+
+### API
+addAnswerToPost(postId, answer)
 
 ## CreatePostScreen
 ### FRONT
 
 ### API
-
+createPost(postData)
 
 
 # Virtual Asistant Chat Bot
