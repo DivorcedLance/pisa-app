@@ -332,16 +332,67 @@ getPostById(postId)
 
 ## PostScreen
 ### FRONT
+toma el `post` de parametro
+muestra el contenido, dependiendo si fue un post de tipo common o community
 
 ### API
-addAnswerToPost(postId, answer)
+
 
 ## CreatePostScreen
+tanto para crear un post como la respuesta
 ### FRONT
+#### front pide
+nada
+### community
+#### front envia
+front envia a la api
 
-### API
+{
+    title: string;
+    content: string;
+    date: string;
+    student: Student;
+    type: string
+}
+
+#### api envia
 createPost(postData)
+{
+    title: string;
+    content: string;
+    date: string;
+    student: Student; //seria string para solo guardar el id, pero no sé cómo lo quieres manejar
+    answers: []
+    responseTo: null;
+    type: string
+}
 
+### dando una respuesta
+#### front envia
+front envia a la api
+
+{
+    title: string;
+    content: string;
+    date: string;
+    student: Student; //el id
+    type: string;
+    responseTo: postId; //string
+}
+
+#### api envia
+createPost(postData)
+{
+    title: string;
+    content: string;
+    date: string;
+    student: id //string
+    answers: []
+    responseTo: postId; //string
+    type: string
+}
+
+but al crear el post, actualiza el campo de answers del postId referido en responseTo
 
 # Virtual Asistant Chat Bot
 ## ChatBotScreen
