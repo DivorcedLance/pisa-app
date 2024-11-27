@@ -286,16 +286,47 @@ getQuestionsById
 # Comunity
 ## FrequentPostScreen
 ### FRONT
+pide los posts de tipo common
+{
+    title: string;
+    content: string;
+}
+### FRONT PASA `post` como parametro a PostScreen
 
 ### API
 getPostsByType
-
+devuelve
+{
+    id: string;
+    title: string;
+    content: string;
+    type: string
+}
 
 ## ComunityPostScreen
 ### FRONT
-
+pide los posts de tipo community
+{
+    title: string;
+    content: string;
+    date: string;
+    student: Student;
+    answers: CommunityPost[];
+    responseTo: string | null;
+    type: string
+}
 ### API
 getPostsByType
+{
+    id: string;
+    title: string;
+    content: string;
+    date: string;
+    student: Student;
+    answers: CommunityPost[];
+    responseTo: string | null;
+    type: string
+}
 
 getPostById(postId)
 
