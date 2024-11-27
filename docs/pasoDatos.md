@@ -170,8 +170,9 @@ se muestra la data necesaria del userData de authStore
 - API reemplaza esto en los campos correspondientes de userData de authStore
 
 ## AssignedTutorScreen
-### Front pide tutorId del userData del authStore
-con el tutorId pide el tutor a la api
+<!-- ### Front pide tutorId del userData del authStore
+con el tutorId pide el tutor a la api -->
+creo que es mejor si un `tutor` es pasado como parametro, para no estar haciendo la consulta dentro del screen, sino defrente ya colocar los datos, se estaría haciendo esa consulta en PerfilScreen
 
 ### API
 Pide el tutor a firebase
