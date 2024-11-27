@@ -1,6 +1,13 @@
 export type Achivements = {
   id: string;
-  name: string;
+  title: string;
   description: string;
-  date: string;
+  category: string;
+  level: string;
+  icon: string;
+  progress: {
+    completed: number;
+    total: number;
+  };
+  status: string;
 };

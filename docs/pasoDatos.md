@@ -254,13 +254,7 @@ getEvaluationById
 
 ```json
 {
-  questions: {
-    0: String, //es id de una question
-    1: String,
-    .
-    .
-    .
-  }
+  questions: Question[]
 }
 ```
 
@@ -295,5 +289,13 @@ getQuestionsById
 
 ## ComunityPostScreen
 
-## CreatePost
+## CreatePostScreen
 
+### FRONT
+
+### API
+
+
+
+# Virtual Asistant Chat Bot
+## ChatBotScreen
