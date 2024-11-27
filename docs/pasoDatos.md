@@ -285,13 +285,21 @@ getQuestionsById
 
 # Comunity
 ## FrequentPostScreen
+### FRONT
+
+### API
 
 ## PostScreen
+### FRONT
+
+### API
 
 ## ComunityPostScreen
+### FRONT
+
+### API
 
 ## CreatePostScreen
-
 ### FRONT
 
 ### API
