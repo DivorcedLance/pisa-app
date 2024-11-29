@@ -74,6 +74,7 @@ export default function ProfileScreen() {
                     <Text className="text-[20px] font-normal leading-5 tracking-wide color-white">Cerrar Sesión</Text>
                 </Pressable>
             </View>
+            
         </ScrollView>
     );
 }

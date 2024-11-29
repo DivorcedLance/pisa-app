@@ -31,6 +31,9 @@ export default function HomeScreen() {
           <Text className='font-semibold text-xl'>Lectura</Text>
         </TouchableOpacity>
       </View>
+      <Link href="/prep/achievementsview">
+                Profile
+            </Link>
     </View>
 
   );
