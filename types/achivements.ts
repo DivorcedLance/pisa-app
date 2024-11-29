@@ -2,7 +2,8 @@ export type Achivements = {
   id: string;
   title: string;
   description: string;
-  category: string;
+  course: string;
+  topic?: string;
   level: string;
   icon: string;
   progress: {

@@ -5,7 +5,7 @@ export const mockAchivements: Achivements[] = [
         "id": "1",
         "title": "Primer paso",
         "description": "Has resuelto tu primer ejercicio correctamente.",
-        "category": "Matemáticas",
+        "course": "Matemáticas",
         "level": "Basic",
         "icon": "medal_bronze",
         "progress": {
@@ -18,7 +18,7 @@ export const mockAchivements: Achivements[] = [
         "id": "2",
         "title": "Estrella en Matemáticas",
         "description": "Resuelve 10 ejercicios de matemáticas.",
-        "category": "Matemáticas",
+        "course": "Matemáticas",
         "level": "Basic",
         "icon": "bronze",
         "progress": {
@@ -31,7 +31,7 @@ export const mockAchivements: Achivements[] = [
         "id": "3",
         "title": "Científico en Acción",
         "description": "Completa un tema de ciencias al 100%.",
-        "category": "Ciencias",
+        "course": "Ciencias",
         "level": "Basic",
         "icon": "trophy_gold",
         "progress": {
@@ -44,7 +44,7 @@ export const mockAchivements: Achivements[] = [
         "id": "4",
         "title": "Maratón de Ejercicios",
         "description": "Resuelve 50 ejercicios en total.",
-        "category": "Matemáticas",
+        "course": "Matemáticas",
         "level": "Intermediate",
         "icon": "silver",
         "progress": {
@@ -57,7 +57,7 @@ export const mockAchivements: Achivements[] = [
         "id": "5",
         "title": "Maestro del Lenguaje",
         "description": "Resuelve 20 ejercicios de lenguaje correctamente.",
-        "category": "Lectura",
+        "course": "Lectura",
         "level": "Basic",
         "icon": "bronze",
         "progress": {

@@ -13,15 +13,9 @@ Nada
 #### Front pide a la api
 Nada
 #### Front envia a la api
-Cuando el usuario ingrese su correo y presione el botón "Continuar", el frontend enviará una solicitud a la API para verificar si el correo existe.
-```json
-{
-    email: String
-}
-```
+
 #### Respuesta de la API
-Si la API confirma que el correo existe, el frontend redirige a PasswordScreen con el correo validado.
-Si no existe, muestra un mensaje de error como: "El correo no está registrado."
+
 
 ### API
 #### Api pide a firebase getStudentByEmail
@@ -129,7 +123,7 @@ se muestra la data necesaria del userData de authStore
     grade: String, //SACADO DEL CLASSROOMID QUE TIENE
     seccion: String, // sacado del classroomId que tiene
     achievments: Achievement[],
-    points: number,
+    points: number, //ponderado
     level: String
 };
 ```

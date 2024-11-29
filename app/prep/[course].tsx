@@ -2,6 +2,7 @@ import { Link } from 'expo-router';
 import { View, Text, Pressable, FlatList, TouchableOpacity } from 'react-native';
 import { HomeIcon } from '@/components/Icons';
 import { Ionicons } from '@expo/vector-icons';
+import { useLocalSearchParams } from 'expo-router';
 
 const renderCurso = ({ item, course}: { item: any, course: String}) => (
     <TouchableOpacity className={`w-36 h-16 my-2 mx-4 items-center justify-center rounded-lg ${
@@ -16,6 +17,7 @@ const renderCurso = ({ item, course}: { item: any, course: String}) => (
 );
 
 export default function TopicsScreen() {
+    const { course } = useLocalSearchParams();
     const courses = [
         { id: 1, course: 'Math', name: 'Matemáticas' },
         { id: 2, course: 'Science', name: 'Ciencias' },
@@ -39,7 +41,7 @@ export default function TopicsScreen() {
       {/* Título */}
       <View className="mt-4 ml-5 mb-4">
         <Text>
-          ¿Qué quieres aprender?
+          ¿Qué quieres aprender? {course}
         </Text>
         <Text>
           Elige una opción...
