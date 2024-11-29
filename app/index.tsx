@@ -18,7 +18,7 @@ export default function HomeScreen() {
       </View>
       <View className="flex flex-1 bg-[#1B1E1A] justify-center items-center">
         
-      <Link asChild href={"/prep/[course]"}>
+      <Link asChild href={"./prep/Matemáticas"}>
         <TouchableOpacity className="bg-[#D83131] py-4 mb-6 w-64 justify-center items-center rounded-xl h-20">
           <Text className='font-semibold text-xl'>Matemáticas</Text>
         </TouchableOpacity>
@@ -31,6 +31,9 @@ export default function HomeScreen() {
           <Text className='font-semibold text-xl'>Lectura</Text>
         </TouchableOpacity>
       </View>
+      <Link className='font-normal text-2xl text-white'  href="./prep/profile">
+          Profile
+        </Link>
     </View>
 
   );
