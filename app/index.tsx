@@ -30,6 +30,9 @@ export default function HomeScreen() {
         <Link className='font-normal text-2xl text-white'  href="./prep/assignedtutor">
           AssignedTutor
         </Link>
+        <Link className='font-normal text-2xl text-white'  href="./prep/chatgtp">
+          Virtual Asistant
+        </Link>
       </View>
       <View className='bg-blue-400'>
         <Link className='font-normal text-2xl text-white'  href="./login/email">
@@ -41,6 +44,7 @@ export default function HomeScreen() {
         <Link className='font-normal text-2xl text-white'  href="./login/logout">
           Logout
         </Link>
+
       </View>
     </View>
   );
