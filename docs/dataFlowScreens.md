@@ -176,20 +176,19 @@ Achivement[]
   "topicId": Topic | null, // from topicId
 }
 
-Course
-{
-  "name": "string",
-  "color": "string"
-}
+  Course
+  {
+    "name": "string",
+    "color": "string"
+  }
 
-Topic
-{
-  "id": "string",
-  "name": "string",
-  "index": "number",
-}
+  Topic
+  {
+    "id": "string",
+    "name": "string",
+    "index": "number",
+  }
 ```
-
 
 **Nota**: El front va a tomar de la info del perfil para el progreso individual del usuario.
 
