@@ -54,15 +54,15 @@ export default function AchievementsView() {
       {/* Bases dispuestas equidistantemente */}
       <mesh position={[-2, 0, -2]}>
         <cylinderGeometry args={[1.5, 1.5, 0.2, 32]} />
-        <meshStandardMaterial color="orange" />
+        <meshStandardMaterial color="#BBC548" />
       </mesh>
       <mesh position={[2, 0, -2]}>
         <cylinderGeometry args={[1.5, 1.5, 0.2, 32]} />
-        <meshStandardMaterial color="blue" />
+        <meshStandardMaterial color="#D83131" />
       </mesh>
       <mesh position={[0, 0, 2]}>
         <cylinderGeometry args={[1.5, 1.5, 0.2, 32]} />
-        <meshStandardMaterial color="green" />
+        <meshStandardMaterial color="#0077A1" />
       </mesh>
 
       {/* Cubos apilados encima de cada base */}

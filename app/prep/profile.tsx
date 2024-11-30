@@ -56,6 +56,11 @@ export default function ProfileScreen() {
                             </View>
                         ))}
                     </View>
+                    <Link asChild href={"/prep/achievementsview"}>
+                        <Pressable className="flex justify-center items-center h-[50px] px-8 rounded elevation me-2 bg-[#E8B21A] mt-2">
+                            <Text className="text-[20px] font-normal leading-5 tracking-wide color-white">Ver Logros</Text>
+                        </Pressable>
+                    </Link>
                 </View>
             </View>
             <Pressable className="flex justify-center items-center py-3 px-8 rounded elevation bg-[#0077A1] mt-16">
@@ -69,6 +74,7 @@ export default function ProfileScreen() {
                     <Text className="text-[20px] font-normal leading-5 tracking-wide color-white">Cerrar Sesión</Text>
                 </Pressable>
             </View>
+            
         </ScrollView>
     );
 }
