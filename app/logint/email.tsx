@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { View, Text, TextInput, Pressable } from "react-native";
 import { useRouter } from "expo-router";
-import useAuthStore from "@/stores/authStore";
+import useAuthStore from "@/stores/authStoreOld";
 
 export default function EmailScreen() {
   const [emailInput, setEmailInput] = useState("");

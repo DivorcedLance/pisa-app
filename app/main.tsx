@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
-import useAuthStore from '@/stores/authStore';
+import useAuthStore from '@/stores/authStoreOld';
 import { User } from '@/types/user';
 import { UserProfileData } from '@/components/userData/UserProfileData';
 
@@ -9,7 +9,7 @@ export default function MainScreen() {
   const { userData } : { userData: User | null } = useAuthStore();
 
   if (!userData) {
-    router.push('/login/email');
+    // router.push('/login/email');
     return null;
   }
 

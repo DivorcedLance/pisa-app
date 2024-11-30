@@ -9,6 +9,12 @@ export default function HomeScreen() {
         <HomeIcon /> Index
       </Text>
       <View className='bg-green-400'>
+        <Link className='font-normal text-2xl text-white'  href="/testeo">
+          Testeo
+        </Link>
+        <Link className='font-normal text-2xl text-white'  href="/testeo2">
+          Testeo2
+        </Link>
         <Link className='font-normal text-2xl text-white'  href="./prep/login">
           Login
         </Link>
@@ -26,8 +32,14 @@ export default function HomeScreen() {
         </Link>
       </View>
       <View className='bg-blue-400'>
-        <Link className='font-normal text-2xl text-white'  href="./login/email">
+        <Link className='font-normal text-2xl text-white'  href="./login/login">
           Login
+        </Link>
+        <Link className='font-normal text-2xl text-white'  href="./login/register">
+          Register
+        </Link>
+        <Link className='font-normal text-2xl text-white'  href="./login/logout">
+          Logout
         </Link>
       </View>
     </View>

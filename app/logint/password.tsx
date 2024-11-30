@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { View, Text, TextInput, Pressable } from "react-native";
-import useAuthStore from "@/stores/authStore";
+import useAuthStore from "@/stores/authStoreOld";
 import { useRouter } from "expo-router";
 
 export default function PasswordScreen() {

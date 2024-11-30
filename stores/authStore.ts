@@ -1,36 +1,53 @@
 import { create } from "zustand";
-import { login, LoginError } from "@/lib/firebase/auth";
-import { Student } from "@/types/student";
-import { Teacher } from "@/types/teacher";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, User } from "firebase/auth";
+import { auth } from "@/lib/firebase/firebaseConfig";
 
+// Define la interfaz para el estado de autenticación
 interface AuthState {
-  email: string;
-  password: string;
-  userData: Student | Teacher | null;
-  setEmail: (email: string) => void;
-  setPassword: (password: string) => void;
-  login: () => Promise<void>;
+  user: User | null;
+  isLoading: boolean;
+  error: string | null;
+  login: (email: string, password: string) => Promise<void>;
+  register: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
 }
 
-const useAuthStore = create<AuthState>((set, get) => ({
-  email: "",
-  password: "",
-  userData: null,
-  setEmail: (email: string) => set({ email }),
-  setPassword: (password: string) => set({ password }),
-  login: async () => {
+// Implementa el store de Zustand
+export const useAuthStore = create<AuthState>((set) => ({
+  user: null,
+  isLoading: false,
+  error: null,
+
+  // Login con email y password
+  login: async (email: string, password: string) => {
+    set({ isLoading: true, error: null });
     try {
-      const user = await login(get().email, get().password);
-      set({ password: "" });
-      set({ userData: user });
-    } catch (error) {
-      if (error instanceof LoginError) {
-        throw new Error(error.message);
-      } else {
-        console.error(error);
-      }
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      set({ user: userCredential.user, isLoading: false });
+    } catch (error: any) {
+      set({ error: error.message, isLoading: false });
+    }
+  },
+
+  // Registro con email y password
+  register: async (email: string, password: string) => {
+    set({ isLoading: true, error: null });
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      set({ user: userCredential.user, isLoading: false });
+    } catch (error: any) {
+      set({ error: error.message, isLoading: false });
+    }
+  },
+
+  // Logout
+  logout: async () => {
+    set({ isLoading: true });
+    try {
+      await signOut(auth);
+      set({ user: null, isLoading: false });
+    } catch (error: any) {
+      set({ error: error.message, isLoading: false });
     }
   },
 }));
-
-export default useAuthStore;
