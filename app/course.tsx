@@ -1,26 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Pressable, ScrollView, ActivityIndicator } from "react-native";
 import { useRouter } from "expo-router";
-import { getCourseList, Course } from "@/lib/firebase/course";
+import { useCourseStore } from "@/stores/courseStore";
 
 export default function coursesScreen() {
-  const [courses, setCourses] = useState<Course[]>([]);
+  const { courses, fetchCourses } = useCourseStore();
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
 
-  // Llama a la función para obtener la lista de cursos
   useEffect(() => {
-    async function fetchCourses() {
-      try {
-        const courseList = await getCourseList();
-        setCourses(courseList);
-      } catch (error: any) {
-        console.error("Error al obtener la lista de cursos:", error.message);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchCourses();
+    const loadCourses = async () => {
+      await fetchCourses();
+      setLoading(false);
+    };
+
+    loadCourses();
   }, []);
 
   return (
@@ -30,7 +24,7 @@ export default function coursesScreen() {
         <ActivityIndicator size="large" color="#E8B21A" />
       ) : (
         <ScrollView>
-          {courses.map((course) => (
+          {Object.values(courses).map((course) => (
             <Pressable
               key={course.name}
               className="mb-4 p-4 rounded-md"

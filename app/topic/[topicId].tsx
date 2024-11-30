@@ -1,25 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Pressable, ActivityIndicator } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
-import { getTopicDataById, Topic } from "@/lib/firebase/topic";
-import { useCourseStore } from "@/stores/useCourseStore";
+import { useCourseStore } from "@/stores/courseStore";
 
 export default function TopicScreen() {
   const { topicId } = useLocalSearchParams<{ topicId: string }>();
-  const [topic, setTopic] = useState<Topic | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const { selectedCourse, selectTopic, selectedTopic } = useCourseStore();
   const router = useRouter();
-  const { courses } = useCourseStore();
-
-  const course = courses["Matemáticas"];
 
   useEffect(() => {
-    async function fetchTopic() {
+    const loadTopic = async () => {
       if (!topicId) return;
 
       try {
-        const topicData = await getTopicDataById(topicId);
-        setTopic(topicData);
+        await selectTopic(topicId);
       } catch (error: any) {
         console.error("Error fetching topic data:", error.message);
       } finally {
@@ -27,10 +22,10 @@ export default function TopicScreen() {
       }
     }
 
-    fetchTopic();
-  }, [topicId]);
+    loadTopic();
+  }, [topicId, selectTopic]);
 
-  if (loading || !topic) {
+  if (loading || !selectedTopic) {
     return (
       <View className="flex-1 justify-center items-center bg-[#1B1E1A]">
         <ActivityIndicator size="large" color="#E8B21A" />
@@ -40,20 +35,20 @@ export default function TopicScreen() {
 
   return (
     <View className="flex-1 bg-[#1B1E1A] p-6">
-      <Text className="text-white text-3xl font-bold mb-6" style={{ color: course?.color }}>
-        {topic.name}
+      <Text className="text-white text-3xl font-bold mb-6" style={{ color: selectedCourse?.color }}>
+        {selectedTopic.name}
       </Text>
       <Pressable
         className="bg-[#262A28] p-4 rounded-md mb-4"
-        style={{ backgroundColor: course?.color }}
-        onPress={() => "router.push(`/course/${courseName}/topic/${topicId}/multimedia`)"}
+        style={{ backgroundColor: selectedCourse?.color }}
+        onPress={() => router.push(`/multimedia`)}
       >
         <Text className="text-white text-lg font-bold">Contenido Multimedia</Text>
       </Pressable>
       <Pressable
         className="bg-[#262A28] p-4 rounded-md"
-        style={{ backgroundColor: course?.color }}
-        onPress={() => "router.push(`/course/${courseName}/topic/${topicId}/evaluations`)"}
+        style={{ backgroundColor: selectedCourse?.color }}
+        onPress={() => router.push(`/evaluation`)}
       >
         <Text className="text-white text-lg font-bold">Evaluaciones</Text>
       </Pressable>
