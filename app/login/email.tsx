@@ -1,32 +1,31 @@
 import { useState } from "react";
-import { View, Text, TextInput, Pressable } from "react-native";
+import { View, Text, TextInput, Pressable, Alert } from "react-native";
 import { useRouter } from "expo-router";
-import useAuthStore from "@/stores/authStoreOld";
+import { useAuthStore } from "@/stores/authStore";
 
 export default function EmailScreen() {
-  const [emailInput, setEmailInput] = useState("");
+  const [emailInput, setEmailInput] = useState<string>("");
   const setEmail = useAuthStore((state) => state.setEmail);
   const router = useRouter();
 
   const handleNext = () => {
     if (emailInput) {
-      setEmail(emailInput); // Guarda el correo en el store
-      router.push("/login/password"); // Navega sin pasar parámetros
+      setEmail(emailInput);
+      router.push("/login/password");
     } else {
-      alert("Por favor ingrese su correo");
+      Alert.alert("Error", "Por favor, ingrese su correo electrónico.");
     }
   };
 
   return (
     <View className="bg-[#1B1E1A] p-8 flex flex-1 justify-center">
-      <Text className="font-bold text-4xl flex gap-7 color-white">
+      <Text className="font-bold text-4xl text-white mb-8">
         Ingrese el correo con el{"\n"}que se registró
       </Text>
-      <View className="mb-12"></View>
-      <Text className="font-bold text-2xl color-white">Email</Text>
+      <Text className="font-bold text-2xl text-white">Email</Text>
       <View className="border-b-slate-50 border-b-[1px]">
         <TextInput
-          className="color-white font-bold text-center p-2"
+          className="text-white font-bold text-center p-2"
           placeholder="Ingrese el correo electrónico"
           placeholderTextColor="#8D8D8D"
           onChangeText={setEmailInput}
@@ -37,7 +36,7 @@ export default function EmailScreen() {
         className="bg-[#E8B21A] items-center justify-center p-2 mt-8 rounded-md"
         onPress={handleNext}
       >
-        <Text className="font-bold text-2xl text-center color-white">
+        <Text className="font-bold text-2xl text-center text-white">
           Siguiente
         </Text>
       </Pressable>

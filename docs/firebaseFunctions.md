@@ -563,7 +563,7 @@ Achivement[]
 
 ```ts
 {
-  "courseId": string;
+  "courseName": string;
 }
 ```
 

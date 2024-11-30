@@ -1,6 +1,6 @@
 import * as Crypto from 'expo-crypto';
 
-export async function generateUUID() {
+export async function uuidv4() {
   const randomBytes = await Crypto.getRandomBytesAsync(16);
   const uuid = [
     randomBytes[0].toString(16).padStart(2, '0'),

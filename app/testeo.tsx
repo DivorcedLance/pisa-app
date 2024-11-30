@@ -29,7 +29,6 @@ export default function TesteoScreen() {
               <Text className='font-bold'>{alumno.firstName} {alumno.lastName}</Text>
               <Text className='font-normal'>{alumno.email}</Text>
               <Text className='font-normal'>{alumno.birthDate.toUTCString()}</Text>
-              
             </View>
           ))}
         </View>

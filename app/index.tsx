@@ -32,7 +32,7 @@ export default function HomeScreen() {
         </Link>
       </View>
       <View className='bg-blue-400'>
-        <Link className='font-normal text-2xl text-white'  href="./login/login">
+        <Link className='font-normal text-2xl text-white'  href="./login/email">
           Login
         </Link>
         <Link className='font-normal text-2xl text-white'  href="./login/register">

@@ -1,7 +1,7 @@
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebase/firebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
-import { generateUUID } from "../crypto/crypto";
+import { uuidv4 } from "@/lib/crypto/crypto";
 
 export interface Alumno {
   id: string;
@@ -47,12 +47,6 @@ export const fetchAlumnos = async (): Promise<Alumno[]> => {
   }
 };
 
-// Ejemplo de uso
-(async () => {
-  const alumnos = await fetchAlumnos();
-  console.log("Alumnos:", alumnos);
-})();
-
 export const fetchUsers = async (): Promise<UserData[]> => {
   type UserDataPrevDate = {
     id: string;
@@ -77,7 +71,6 @@ export const fetchUsers = async (): Promise<UserData[]> => {
     const usersCollection = collection(db, "User");
     const snapshot = await getDocs(usersCollection);
     const users: UserDataPrevDate[] = snapshot.docs.map(doc => {
-      console.log("doc.data()", doc.data());
       return ({
       id: doc.id,
       ...doc.data(),
@@ -113,7 +106,7 @@ export async function createStudent({
 }) {
 
   // Generar un ID único para el estudiante
-  const studentId = await generateUUID();
+  const studentId = await uuidv4();
 
   const studentData = {
     email,
@@ -129,8 +122,6 @@ export async function createStudent({
       sectionId: "", // Inicialmente vacío
     },
   };
-
-  console.log("studentData", studentData);
 
   try {
     // Guardar en Firestore
