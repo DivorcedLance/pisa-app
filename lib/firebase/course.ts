@@ -1,7 +1,5 @@
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebase/firebaseConfig";
-import { doc, setDoc } from "firebase/firestore";
-import { uuidv4 } from "@/lib/crypto/crypto";
 
 export type Course = {
   name: string;

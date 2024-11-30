@@ -19,10 +19,10 @@ export type Topic = {
 export type Course = {
   name: string;
   color: string;
-  topics: Topic[];
+  topics?: Topic[];
 };
 
-export async function getTopicList(courseName: string): Promise<Course> {
+export async function getCourseDataByCourseName(courseName: string): Promise<Course> {
   // Obtener el curso
   const courseRef = doc(db, "Course", courseName);
   const courseSnap = await getDoc(courseRef);
