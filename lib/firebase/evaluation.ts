@@ -1,47 +1,4 @@
-// ## getEvaluationDataById()
-
-// ### Request
-
-// ```ts
-// {
-//   "evaluationId": string;
-// }
-// ```
-
-// ### Response
-
-// ```json
-// Evaluation
-// {
-//   "id": "string",
-//   "level": Level,
-//   "totalScore": "number",
-
-//   "questions": Question[], // from T[Question] based on questionIds
-//   "currentScore": "number", // from T[StudentEvaluation]
-//   "weightedScore": "number", // from T[StudentEvaluation]
-//   "date": "date", // from T[StudentEvaluation]
-// }
-
-//   Level
-//   {
-//     "name": "string",
-//     "index": "number",
-//   }
-
-//   Question
-//   {
-//     "id": "string",
-//     "statement": "string",
-//     "questionImgLink": "string",
-//     "options": "string[]",
-//     "correctOptionIndex": "number",
-//     "score": "number",
-//     "solution": "string",
-//   }
-// ```
-
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import { db } from "@/lib/firebase/firebaseConfig";
 
 export type Evaluation = {
@@ -53,9 +10,10 @@ export type Evaluation = {
   totalScore: number;
 
   questions: Question[];
-  currentScore: number;
-  weightedScore: number;
-  date: Date;
+  
+  currentScore?: number;
+  weightedScore?: number;
+  date?: Date;
 };
 
 export type Question = {
@@ -68,36 +26,75 @@ export type Question = {
   solution: string;
 };
 
-// export async function getEvaluationDataById(evaluationId: string, studentId: string): Promise<Evaluation> {
-//   const evaluationRef = doc(db, "Evaluation", evaluationId);
-//   const evaluationSnap = await getDoc(evaluationRef);
+export type StudentEvaluation = {
+  id: string;
+  studentId: string;
+  evaluationId: string;
 
-//   if (!evaluationSnap.exists()) {
-//     throw new Error(`Evaluation with ID "${evaluationId}" not found`);
-//   }
+  currentScore: number;
+  weightedScore: number;
+  date: Date;
 
-//   const evaluationData = evaluationSnap.data();
+  selectedOptionIndexs: number[];
+};
 
-//   const questionPromises = evaluationData.questionIds.map(async (questionId: string) => {
-//     const questionRef = doc(db, "Question", questionId);
-//     const questionSnap = await getDoc(questionRef);
+export async function getEvaluationDataById(evaluationId: string, studentId: string): Promise<Evaluation> {
+  // Referencia a la evaluación
+  const evaluationRef = doc(db, "Evaluation", evaluationId);
+  const evaluationSnap = await getDoc(evaluationRef);
 
-//     if (!questionSnap.exists()) {
-//       throw new Error(`Question with ID "${questionId}" not found`);
-//     }
+  // Verificar si existe la evaluación
+  if (!evaluationSnap.exists()) {
+    throw new Error(`Evaluation with ID "${evaluationId}" not found`);
+  }
 
-//     return { id: questionId, ...questionSnap.data() } as Question;
-//   });
+  // Obtener datos de la evaluación
+  const evaluationData = evaluationSnap.data();
 
-//   const questions = await Promise.all(questionPromises);
+  // Obtener preguntas asociadas
+  const questionPromises = evaluationData.questionIds.map(async (questionId: string) => {
+    const questionRef = doc(db, "Question", questionId);
+    const questionSnap = await getDoc(questionRef);
 
-//   return {
-//     id: evaluationId,
-//     level: evaluationData.level,
-//     totalScore: evaluationData.totalScore,
-//     questions,
-// //   "currentScore": "number", // from T[StudentEvaluation]
-// //   "weightedScore": "number", // from T[StudentEvaluation]
-// //   "date": "date", // from T[StudentEvaluation]
-//   };
-// }
+    if (!questionSnap.exists()) {
+      throw new Error(`Question with ID "${questionId}" not found`);
+    }
+
+    return { id: questionId, ...questionSnap.data() } as Question;
+  });
+
+  const questions = await Promise.all(questionPromises);
+
+  // Consultar la colección StudentEvaluation con filtros
+  const studentEvaluationRef = collection(db, "StudentEvaluation");
+  const studentEvaluationQuery = query(
+    studentEvaluationRef,
+    where("studentId", "==", studentId),
+    where("evaluationId", "==", evaluationId)
+  );
+  const studentEvaluationSnap = await getDocs(studentEvaluationQuery);
+
+  // Verificar si hay datos de StudentEvaluation
+  if (!studentEvaluationSnap.empty) {
+    // Obtener los datos del primer documento encontrado
+    const studentEvaluationData = studentEvaluationSnap.docs[0].data();
+      // Retornar la evaluación consolidada
+    return {
+      id: evaluationId,
+      level: evaluationData.level,
+      totalScore: evaluationData.totalScore,
+      questions,
+      currentScore: studentEvaluationData.currentScore,
+      weightedScore: studentEvaluationData.weightedScore,
+      date: studentEvaluationData.date,
+    };
+  }
+
+  return {
+    id: evaluationId,
+    level: evaluationData.level,
+    totalScore: evaluationData.totalScore,
+    questions,
+  };
+
+}
