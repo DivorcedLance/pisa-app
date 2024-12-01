@@ -144,7 +144,7 @@ Level
 # StudentTopic
 ```json
 {
-  "id": "string", //PK  //Not Used
+  "id": "string", //PK //Not Used
   "studentId": "string",
   "topicId": "string",
   "weightedScore": "number",
