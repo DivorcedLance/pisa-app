@@ -12,28 +12,25 @@ export default function ProfileScreen() {
         puntos: 15,
         logros: [
             {
-                nombre: "Recien llegando a matematicas!",
-                descripcion: "Completa tu primer ejercicio de álgebra.",
-                curso: "Matematicas",
-                tipo: "bronce",
-                puntos: 5
+                achievementTypeId:"1",
+                courseId: "Matemáticas",
+                description: "Completa el topico Algebra para obtener este logro",
+                name: "Logro de Algebra",
             },
             {
-                nombre: "Me siento fragmentado",
-                descripcion: "Resuelve correctamente 5 problemas de fracciones.",
-                curso: "Matematicas",
-                tipo: "bronce",
-                puntos: 5
+                achievementTypeId:"2",
+                courseId: "Ciencias",
+                description: "Completa el topico Dinamica para obtener este logro",
+                name: "Logro de Dinamica",
             },
             {
-                nombre: "Recien llegando a ciencias!",
-                descripcion: "Resuelve tu primer ejercicio de ciencias.",
-                curso: "Matematicas",
-                tipo: "bronce",
-                puntos: 5
+                achievementTypeId:"3",
+                courseId: "Lectura",
+                description: "Completa el topico Parrafos para obtener este logro",
+                name: "Logro de Parrafos",
             }
         ],
-        idTutor: String
+        idTutor: "SD"
     };
 
     return (
@@ -50,9 +47,13 @@ export default function ProfileScreen() {
                     <Text className="text-center text-4xl">Logros</Text>
                     <View className="flex flex-col">
                         {alumno.logros.map((logro, index) => (
-                            <View key={index} className="flex flex-row justify-between items-center bg-[#b2b2b2] p-2 my-2">
-                                <Text className="text-center text-2xl">{logro.nombre}</Text>
-                                <Text className="text-center text-2xl">{logro.puntos}</Text>
+                            <View key={index} className="flex justify-between items-center bg-[#b2b2b2] p-2 my-2">
+                                <View className="flex flex-row">
+                                    <Text className="text-2xl">{logro.description}</Text>
+
+                                    <Text className="text-2xl">A</Text>
+
+                                </View>
                             </View>
                         ))}
                     </View>
