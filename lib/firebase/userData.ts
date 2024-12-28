@@ -1,7 +1,5 @@
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebase/firebaseConfig";
-import { doc, setDoc } from "firebase/firestore";
-import { uuidv4 } from "@/lib/crypto/crypto";
 
 export type UserData = {
   id: string;
@@ -21,11 +19,24 @@ export type UserData = {
   };
 };
 
-export async function getUserDataByEmail(email: string) {
+export async function getUserDataByEmail(email: string): Promise<UserData | null> {
   const querySnapshot = await getDocs(collection(db, "User"));
-  const userData = querySnapshot.docs.find((doc) => doc.data().email === email)?.data();
+
+  // Buscar el documento que coincida con el email
+  const matchingDoc = querySnapshot.docs.find((doc) => doc.data().email === email);
+
+  // Si no se encuentra, retorna null
+  if (!matchingDoc) {
+    return null;
+  }
+
+  // Extraer datos del usuario
+  const userData = matchingDoc.data();
+
+  // Retornar el objeto con el ID incluido
   return {
+    id: matchingDoc.id, // Extraer el ID del documento
     ...userData,
-    birthDate: new Date(userData!.birthDate.seconds * 1000),
+    birthDate: new Date(userData.birthDate.seconds * 1000), // Convertir timestamp a Date
   } as UserData;
 }

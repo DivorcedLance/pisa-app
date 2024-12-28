@@ -29,6 +29,7 @@ export default function MainScreen() {
             Bienvenido, {user.firstName} {user.lastName} 👋
           </Text>
           <View className="bg-[#262A28] p-4 rounded-lg w-full mb-6">
+          <Text className="text-white text-lg">Id: {user.id}</Text>
             <Text className="text-white text-lg">Correo: {user.email}</Text>
             <Text className="text-white text-lg">Teléfono: {user.telephone}</Text>
             <Text className="text-white text-lg">
@@ -48,13 +49,19 @@ export default function MainScreen() {
             ) : null}
           </View>
           <Pressable
-            className="bg-[#E8B21A] px-6 py-3 rounded-md"
+            className="bg-[#E8B21A] w-48 px-6 py-3 mb-4 rounded-md"
             onPress={() => router.push("/course")}
           >
             <Text className="text-black text-lg font-bold text-center">Ver Cursos</Text>
           </Pressable>
           <Pressable
-            className="bg-[#E8B21A] px-6 py-3 rounded-md"
+            className="bg-[#E8B21A] w-48 px-6 py-3 mb-4 rounded-md"
+            onPress={() => router.push("./prep/chatgtp")}
+          >
+            <Text className="text-black text-lg font-bold text-center">Asistente</Text>
+          </Pressable>
+          <Pressable
+            className="bg-[#E8B21A] w-48 px-6 py-3 rounded-md"
             onPress={handleLogout}
           >
             <Text className="text-black text-lg font-bold text-center">Cerrar Sesión</Text>
