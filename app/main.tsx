@@ -56,6 +56,18 @@ export default function MainScreen() {
           </Pressable>
           <Pressable
             className="bg-[#E8B21A] w-48 px-6 py-3 mb-4 rounded-md"
+            onPress={() => router.push("./community/communityPosts")}
+          >
+            <Text className="text-black text-lg font-bold text-center">Comunidad</Text>
+          </Pressable>
+          <Pressable
+            className="bg-[#E8B21A] w-48 px-6 py-3 mb-4 rounded-md"
+            onPress={() => router.push("./community/commonQuestions")}
+          >
+            <Text className="text-black text-lg font-bold text-center">Preguntas Frecuentes</Text>
+          </Pressable>
+          <Pressable
+            className="bg-[#E8B21A] w-48 px-6 py-3 mb-4 rounded-md"
             onPress={() => router.push("./prep/chatgtp")}
           >
             <Text className="text-black text-lg font-bold text-center">Asistente</Text>
