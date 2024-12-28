@@ -79,6 +79,7 @@ export async function getEvaluationDataById(evaluationId: string, studentId: str
     // Obtener los datos del primer documento encontrado
     const studentEvaluationData = studentEvaluationSnap.docs[0].data();
       // Retornar la evaluación consolidada
+
     return {
       id: evaluationId,
       level: evaluationData.level,
@@ -89,7 +90,6 @@ export async function getEvaluationDataById(evaluationId: string, studentId: str
       date: studentEvaluationData.date,
     };
   }
-
   return {
     id: evaluationId,
     level: evaluationData.level,
