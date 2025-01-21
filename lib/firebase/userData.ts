@@ -1,4 +1,4 @@
-import { collection, getDocs } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebase/firebaseConfig";
 
 export type UserData = {
@@ -38,5 +38,24 @@ export async function getUserDataByEmail(email: string): Promise<UserData | null
     id: matchingDoc.id, // Extraer el ID del documento
     ...userData,
     birthDate: new Date(userData.birthDate.seconds * 1000), // Convertir timestamp a Date
+  } as UserData;
+}
+
+export async function getUserDataById(id: string): Promise<UserData | null> {
+  const docRef = doc(db, "User", id);
+  const docSnap = await getDoc(docRef);
+  
+  // Verificar si existe el documento
+  if (!docSnap.exists()) {
+    return null;
+  }
+
+  // Extraer datos del usuario
+  const userData = docSnap.data();
+
+  return {
+    id: docRef.id,
+    ...userData,
+    birthDate: new Date(userData.birthDate.seconds * 1000),
   } as UserData;
 }

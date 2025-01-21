@@ -28,7 +28,7 @@ const CommunityPostsScreen = () => {
             title={item.title}
             content={item.content}
             date={item.date}
-            student={item.student}
+            student={item.student!}
             isDetail={false}
             isTouchable={true}
           />

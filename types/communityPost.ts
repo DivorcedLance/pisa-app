@@ -1,11 +1,12 @@
-import { Student } from "@/types/student";
+import { UserData } from "@/lib/firebase/userData";
 
 export type CommunityPost = {
     id: string;
     title: string;
     content: string;
-    date: string;
-    student: Student;
-    answers: CommunityPost[];
+    date: Date;
+    studentId: string;
+    student: UserData;
+    answers?: CommunityPost[];
     responseTo: string | null;
 }

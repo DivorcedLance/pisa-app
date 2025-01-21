@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, FlatList, TextInput, Button, TouchableOpacity } from 'react-native';
 import { useLocalSearchParams , useRouter } from 'expo-router';
-import { getCommunityPosts } from '@/lib/firebase/community';
+import { getCommunityPostById, getCommunityPosts } from '@/lib/firebase/community';
 import { CommunityPost } from '@/types/communityPost';
 import { CommunityPostCard } from '@/components/CommunityPostCard';
 
@@ -14,8 +14,7 @@ const CommunityPostDetails = () => {
 
   React.useEffect(() => {
     const fetchPost = async () => {
-      const data = await getCommunityPosts();
-      const selectedPost = data.find((p) => p.id === communityPostId);
+      const selectedPost = await getCommunityPostById(communityPostId as string);
       setPost(selectedPost || null);
     };
 

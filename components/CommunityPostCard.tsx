@@ -1,3 +1,4 @@
+import { UserData } from "@/lib/firebase/userData";
 import { useRouter } from "expo-router";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
@@ -5,12 +6,8 @@ type CommunityPostProps = {
   id: string;
   title: string;
   content: string;
-  date: string;
-  student: {
-    firstName: string;
-    lastName: string;
-    profilePictureLink: string;
-  };
+  date: Date;
+  student: Pick<UserData, "firstName" | "lastName" | "profileImgLink">;
   isDetail: boolean;
   isTouchable: boolean;
 };
@@ -23,13 +20,13 @@ export const CommunityPostCard = ({ id, title, content, date, student, isDetail,
       <Text className="font-bold text-lg mb-1">{title}</Text>
       <View className="flex flex-row items-center gap-5">
         <Image
-          source={{ uri: student.profilePictureLink }}
+          source={{ uri: student.profileImgLink }}
           style={{ width: 30, height: 30, borderRadius: 50 }}
         />
         <Text className="text-sm text-gray-500">
           {student.firstName} {student.lastName}
         </Text>
-        <Text className="text-sm text-gray-500">{new Date(date).toLocaleDateString()}</Text>
+        <Text className="text-sm text-gray-500">{date.toLocaleDateString()}</Text>
       </View>
       <Text className="text-gray-700 mt-2">{content}</Text>
     </View>
