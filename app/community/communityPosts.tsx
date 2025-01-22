@@ -2,7 +2,7 @@ import { View, Text, FlatList, TextInput, Button } from 'react-native';
 import { getCommunityPosts } from '@/lib/firebase/community';
 import { CommunityPost } from '@/types/communityPost';
 import { CommunityPostCard } from '@/components/CommunityPostCard';
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
 
 const CommunityPostsScreen = () => {
   const [posts, setPosts] = useState<CommunityPost[]>([]);
