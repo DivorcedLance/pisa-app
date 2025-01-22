@@ -1,18 +1,18 @@
-import React from 'react';
 import { View, Text, FlatList, TextInput, Button, TouchableOpacity } from 'react-native';
 import { useLocalSearchParams , useRouter } from 'expo-router';
 import { getCommunityPostById } from '@/lib/firebase/community';
 import { CommunityPost } from '@/types/communityPost';
 import { CommunityPostCard } from '@/components/CommunityPostCard';
+import { useEffect, useState } from 'react';
 
 const CommunityPostDetails = () => {
   const { communityPostId } = useLocalSearchParams();
   const router = useRouter();
 
-  const [post, setPost] = React.useState<CommunityPost | null>(null);
-  const [response, setResponse] = React.useState('');
+  const [post, setPost] = useState<CommunityPost | null>(null);
+  const [response, setResponse] = useState('');
 
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchPost = async () => {
       const selectedPost = await getCommunityPostById(communityPostId as string);
       setPost(selectedPost || null);
