@@ -1,30 +1,27 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { getCommonQuestionById } from '@/lib/firebase/community';
 import { CommonQuestion } from '@/types/commonQuestion';
 
-type CommonQuestionProps = {
-    question: string;
-    answer: string;
-};
-
 const CommonQuestionScreen = () => {
     const { commonQuestionId } = useLocalSearchParams();
 
-    const [commonQuestion, setCommonQuestion] = React.useState<CommonQuestion|null>(null)
+    const [commonQuestion, setCommonQuestion] = useState<CommonQuestion|null>(null)
         
-    React.useEffect(() => {
+    useEffect(() => {
         const fetchData = async () => {
-            const data = await getCommonQuestionById(commonQuestionId as string);
+            const question = await getCommonQuestionById(commonQuestionId as string);
 
-            if (!data) return;
+            if (!question) return;
 
-            setCommonQuestion(data);
+            setCommonQuestion(question);
         };
 
         fetchData();
     }, []);
+
+    if (!commonQuestion) return null;
 
     return (
         <View className="flex-1 p-4 bg-[#1B1E1A]">

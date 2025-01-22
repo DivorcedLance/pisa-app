@@ -1,6 +1,6 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import { View, Text, FlatList, Pressable } from 'react-native';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { getCommonQuestions } from '@/lib/firebase/community';
 import { CommonQuestion } from '@/types/commonQuestion';
 import { RightArrowIcon } from '@/components/Icons';
@@ -30,12 +30,12 @@ const CommonQuestionCard = ({ id, question, answer }: CommonQuestionProps) => {
 };
 
 const CommonQuestionsScreen = () => {
-  const [commonQuestion, setCommonQuestion] = React.useState<CommonQuestion[]>([]);
+  const [commonQuestions, setCommonQuestions] = useState<CommonQuestion[]>([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchData = async () => {
       const data = await getCommonQuestions();
-      setCommonQuestion(data);
+      setCommonQuestions(data);
     };
 
     fetchData();
@@ -45,7 +45,7 @@ const CommonQuestionsScreen = () => {
     <View className="flex-1 p-4 bg-[#1B1E1A]">
       <Text className="text-2xl text-white font-bold mb-4">Preguntas Frecuentes</Text>
       <FlatList
-        data={commonQuestion}
+        data={commonQuestions}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <CommonQuestionCard id={item.id} question={item.question} answer={item.answer} />}
         contentContainerStyle={{ paddingBottom: 20 }}
