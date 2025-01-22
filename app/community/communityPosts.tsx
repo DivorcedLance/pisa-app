@@ -1,4 +1,4 @@
-import { View, Text, FlatList, TextInput, Button } from 'react-native';
+import { View, Text, FlatList, TextInput, Button, Modal } from 'react-native';
 import { addCommunityPost, getCommunityPosts } from '@/lib/firebase/community';
 import { CommunityPost, newCommunityPost } from '@/types/communityPost';
 import { CommunityPostCard } from '@/components/CommunityPostCard';
@@ -7,9 +7,10 @@ import { useAuthStore } from '@/stores/authStore';
 
 const CommunityPostsScreen = () => {
   const [posts, setPosts] = useState<CommunityPost[]>([]);
-
   const [newCommunityPostTitle, setNewCommunityPostTitle] = useState<string>('');
   const [newCommunityPostContent, setNewCommunityPostContent] = useState<string>('');
+  // constante para abrir modal
+  const [modalVisible, setModalVisible] = useState(false);
 
   const { user } = useAuthStore();
 
@@ -42,9 +43,22 @@ const CommunityPostsScreen = () => {
     setNewCommunityPostContent('');
   }
 
+  const handleOpenModal = () => {
+    setModalVisible(true);
+  }
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  }
+
   return (
     <View className="flex-1 p-4 bg-[#1B1E1A]">
       <Text className="text-white text-2xl font-bold mb-4">Preguntas de la Comunidad</Text>
+      {/* boton para abrir modal */}
+      <Button
+        title="Add Question"
+        onPress={handleOpenModal}
+      />
       <FlatList
         data={posts}
         keyExtractor={(item) => item.id}
@@ -61,6 +75,16 @@ const CommunityPostsScreen = () => {
         )}
         contentContainerStyle={{ paddingBottom: 20 }}
       />
+
+      {/* modal */}
+      <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            alert('Modal has been closed.');
+            setModalVisible(!modalVisible);
+          }}/>
 
       <Text className="text-lg font-bold mb-2">Add a Question Title</Text>
       <TextInput
