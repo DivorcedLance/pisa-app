@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, FlatList, TextInput, Button, TouchableOpacity } from 'react-native';
 import { useLocalSearchParams , useRouter } from 'expo-router';
-import { getCommunityPostById, getCommunityPosts } from '@/lib/firebase/community';
+import { getCommunityPostById } from '@/lib/firebase/community';
 import { CommunityPost } from '@/types/communityPost';
 import { CommunityPostCard } from '@/components/CommunityPostCard';
 
@@ -23,7 +23,7 @@ const CommunityPostDetails = () => {
 
   const handleAddResponse = () => {
     if (!response.trim()) return;
-    console.log('Add Response:', response); // Replace with actual response submission logic
+    console.log('Add Response:', response);
     setResponse('');
   };
 
