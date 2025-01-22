@@ -1,31 +1,50 @@
 import { View, Text, FlatList, TextInput, Button, TouchableOpacity, Image } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { getCommunityPostById } from '@/lib/firebase/community';
-import { CommunityPost } from '@/types/communityPost';
+import { addCommunityPost, getCommunityPostById } from '@/lib/firebase/community';
+import { CommunityPost, newCommunityPost } from '@/types/communityPost';
 import { CommunityPostCard } from '@/components/CommunityPostCard';
 import { useEffect, useState } from 'react';
+import { useAuthStore } from '@/stores/authStore';
 
 const CommunityPostDetails = () => {
   const { communityPostId } = useLocalSearchParams();
   const router = useRouter();
 
   const [post, setPost] = useState<CommunityPost | null>(null);
-  const [response, setResponse] = useState('');
+  const [communityPostAnswerTitle, setCommunityPostAnswerTitle] = useState<string>('');
+  const [communityPostAnswerContent, setCommunityPostAnswerContent] = useState<string>('');
+  
+  const { user } = useAuthStore();
 
+  const fetchPost = async () => {
+    const selectedPost = await getCommunityPostById(communityPostId as string);
+    setPost(selectedPost || null);
+  };
+  
   useEffect(() => {
-    const fetchPost = async () => {
-      const selectedPost = await getCommunityPostById(communityPostId as string);
-      setPost(selectedPost || null);
-    };
-
     fetchPost();
   }, [communityPostId]);
 
-  const handleAddResponse = () => {
-    if (!response.trim()) return;
-    console.log('Add Response:', response);
-    setResponse('');
-  };
+  const handleAddQuestion = async () => {
+    if (!user) return;
+    if (!post) return;
+    if (!communityPostAnswerTitle || !communityPostAnswerContent) {
+      alert('Please fill in the title and content of the answer');
+      return;
+    }
+
+    await addCommunityPost({
+      studentId: user!.id,
+      title: communityPostAnswerTitle,
+      content: communityPostAnswerContent,
+      responseTo: post!.id,
+    } as newCommunityPost);
+
+    await fetchPost();
+    
+    setCommunityPostAnswerTitle('');
+    setCommunityPostAnswerContent('');
+  }
 
   if (!post) {
     return (
@@ -69,14 +88,24 @@ const CommunityPostDetails = () => {
         contentContainerStyle={{ paddingBottom: 20 }}
       />
 
-      <Text className="text-lg font-bold mb-2">Add a Response</Text>
+      <Text className="text-lg font-bold mb-2">Add a Question Title</Text>
       <TextInput
-        className="border rounded-md p-2 bg-white mb-4"
-        placeholder="Type your response here..."
-        value={response}
-        onChangeText={setResponse}
+        value={communityPostAnswerTitle}
+        onChangeText={setCommunityPostAnswerTitle}
+        placeholder="Question Title"
+        className="bg-white p-2 mb-4"
       />
-      <Button title="Submit Response" onPress={handleAddResponse} />
+      <Text className="text-lg font-bold mb-2">Add a Question Content</Text>
+      <TextInput
+        value={communityPostAnswerContent}
+        onChangeText={setCommunityPostAnswerContent}
+        placeholder="Question Content"
+        className="bg-white p-2 mb-4"
+      />
+      <Button
+        title="Add Question"
+        onPress={handleAddQuestion}
+      />
     </View>
   );
 };
