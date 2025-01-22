@@ -54,21 +54,22 @@ export default function EvaluationScreen() {
 
   return (
     <View className="flex-1 bg-[#1B1E1A] p-6">
-      {/* Título del curso */}
-      <Text
-        className="text-white text-3xl font-bold mb-6"
-        style={{ color: selectedCourse?.color }}
+      <View className={`flex-row p-2 pl-5 bg-[${selectedCourse?.color}] w-3/6 -inset-x-6`} 
+      style={{ borderTopRightRadius: 10, borderBottomRightRadius: 10 }}
       >
-        {selectedCourse?.name}
-      </Text>
+        <Text
+          className="text-white text-3xl font-bold"
+          style={{
+            color: "white",
+            textShadowColor: "black",
+            textShadowOffset: { width: 1, height: 1 },
+            textShadowRadius: 2,
+          }}
+        >
+          {selectedCourse?.name}
+        </Text>
+      </View>
 
-      {/* Título del tema */}
-      <Text
-        className="text-white text-3xl font-bold mb-6"
-        style={{ color: selectedCourse?.color }}
-      >
-        {selectedTopic?.name}
-      </Text>
       {(selectedEvaluation && user) ? 
         <EvaluationDisplay evaluation={selectedEvaluation} studentId={user.id} /> 
       : null}

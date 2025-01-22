@@ -28,8 +28,9 @@ export default function MainScreen() {
           <Text className="text-white text-3xl font-bold text-center mb-4">
             Bienvenido, {user.firstName} {user.lastName} 👋
           </Text>
+          
           <View className="bg-[#262A28] p-4 rounded-lg w-full mb-6">
-          <Text className="text-white text-lg">Id: {user.id}</Text>
+            <Text className="text-white text-lg">Id: {user.id}</Text>
             <Text className="text-white text-lg">Correo: {user.email}</Text>
             <Text className="text-white text-lg">Teléfono: {user.telephone}</Text>
             <Text className="text-white text-lg">
@@ -48,6 +49,7 @@ export default function MainScreen() {
               </Text>
             ) : null}
           </View>
+
           <Pressable
             className="bg-[#E8B21A] w-48 px-6 py-3 mb-4 rounded-md"
             onPress={() => router.push("/course")}

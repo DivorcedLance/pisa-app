@@ -9,24 +9,33 @@ export default function TopicMultiMediaScreen() {
   return (
     <View className="flex-1 bg-[#1B1E1A] p-6">
       {/* Título del curso */}
-      <Text
-        className="text-white text-3xl font-bold mb-6"
-        style={{ color: selectedCourse?.color }}
+      <View className={`flex-row p-2 pl-5 bg-[${selectedCourse?.color}] w-3/6 -inset-x-6`} 
+      style={{ borderTopRightRadius: 10, borderBottomRightRadius: 10 }}
       >
-        {selectedCourse?.name}
-      </Text>
+        <Text
+          className="text-white text-3xl font-bold"
+          style={{
+            color: "white",
+            textShadowColor: "black",
+            textShadowOffset: { width: 1, height: 1 },
+            textShadowRadius: 2,
+          }}
+        >
+          {selectedCourse?.name}
+        </Text>
+      </View>
 
       {/* Título del tema */}
       <Text
-        className="text-white text-3xl font-bold mb-6"
-        style={{ color: selectedCourse?.color }}
+        className="text-white text-lg font-bold mb-6 mt-2"
+        style={{ color: "white" }}
       >
-        {selectedTopic?.name}
+        Tema: {selectedTopic?.name}
       </Text>
 
       {/* Mostrar video de YouTube */}
       {selectedTopic?.multimediaContent.videoLink ? (
-        <View style={{ height: 200, marginBottom: 20 }}>
+        <View style={{ height: 200, marginBottom: 20 }} className="rounded-3xl overflow-hidden">
           <WebView
             source={{
               uri: `https://www.youtube.com/embed/${getYouTubeVideoId(
@@ -54,17 +63,21 @@ export default function TopicMultiMediaScreen() {
         />
       ) : null}
 
-      <Text className="text-white text-3xl">
-        Descripción
-      </Text>
+      <View className={`flex-row pl-5 mt-4 bg-white w-2/6 -inset-x-6`} >
+        <Text className="text-black text-xl font-bold">
+          Descripción
+        </Text>
+      </View>
 
-      <Text className="text-white text-lg">
-        {selectedTopic?.multimediaContent.description}
-      </Text>
+      <View className="flex-1 bg-[#1B1E1A]">
+        <Text className="text-white text-lg mt-4">
+          {selectedTopic?.multimediaContent.description}
+        </Text>
+      </View>
 
       <Pressable
-        className="bg-[#262A28] p-4 rounded-md mt-6"
-        style={{ backgroundColor: selectedCourse?.color }}
+        className="bg-[#262A28] p-4 rounded-md mt-6 self-center items-center"
+        style={{ backgroundColor: selectedCourse?.color, width: "35%" }}
         onPress={() => router.push(`./evaluations`)}
       >
         <Text className="text-white text-lg font-bold">Ver Ejercicios</Text>
