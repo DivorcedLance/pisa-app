@@ -16,7 +16,7 @@ export const CommunityPostCard = ({ id, title, content, date, student, isDetail,
   const router = useRouter();
 
   const PostCardContent = (
-    <View className={`flex mb-4 p-4 bg-[#535353] ${isTouchable ? "border rounded-md shadow-md" : ""}`}>
+    <View className={`flex mb-4 p-4 bg-[#535353] ${isTouchable ? "border rounded-xl shadow-md" : ""}`}>
       <Text className="text-white font-bold text-lg mb-1">{title}</Text>
       <View className="flex flex-row items-center gap-5">
         <Image

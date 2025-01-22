@@ -5,6 +5,7 @@ import { CommunityPost, newCommunityPost } from '@/types/communityPost';
 import { CommunityPostCard } from '@/components/CommunityPostCard';
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/stores/authStore';
+import { ModalDisplay } from '@/components/ModalDisplay';
 
 const CommunityPostDetails = () => {
   const { communityPostId } = useLocalSearchParams();
@@ -13,14 +14,15 @@ const CommunityPostDetails = () => {
   const [post, setPost] = useState<CommunityPost | null>(null);
   const [communityPostAnswerTitle, setCommunityPostAnswerTitle] = useState<string>('');
   const [communityPostAnswerContent, setCommunityPostAnswerContent] = useState<string>('');
-  
+  const [modalVisible, setModalVisible] = useState(false);
+
   const { user } = useAuthStore();
 
   const fetchPost = async () => {
     const selectedPost = await getCommunityPostById(communityPostId as string);
     setPost(selectedPost || null);
   };
-  
+
   useEffect(() => {
     fetchPost();
   }, [communityPostId]);
@@ -41,9 +43,13 @@ const CommunityPostDetails = () => {
     } as newCommunityPost);
 
     await fetchPost();
-    
+
     setCommunityPostAnswerTitle('');
     setCommunityPostAnswerContent('');
+  }
+
+  const handleOpenModal = () => {
+    setModalVisible(true);
   }
 
   if (!post) {
@@ -55,57 +61,54 @@ const CommunityPostDetails = () => {
   }
 
   return (
-    <View className="flex-1 p-4 bg-[#1B1E1A]">
-      {post.responseTo && (
-        <TouchableOpacity
-          onPress={() => router.push(`../communityPost/${post.responseTo}`)}
-          className="mb-4 p-2 border rounded-md bg-gray-200"
-        >
-          <Text className="text-gray-600">View original post</Text>
-        </TouchableOpacity>
-      )}
+    <View className='flex-1'>
+      {/* modal */}
+      <ModalDisplay modalVisible={modalVisible} setModalVisible={setModalVisible} setNewCommunityPostContent={setCommunityPostAnswerContent} setNewCommunityPostTitle={setCommunityPostAnswerTitle} handleAddQuestion={handleAddQuestion} newCommunityPostContent={communityPostAnswerContent} newCommunityPostTitle={communityPostAnswerTitle} />
+      <View className="flex-1 p-4 bg-[#1B1E1A]">
+        {post.responseTo && (
+          <TouchableOpacity
+            onPress={() => router.push(`../communityPost/${post.responseTo}`)}
+            className="mb-4 p-2 border rounded-md bg-gray-200"
+          >
+            <Text className="text-gray-600">View original post</Text>
+          </TouchableOpacity>
+        )}
 
-      {/* <CommunityPostCard {...post} isDetail={true} isTouchable={false}/> */}
-      <Text className="text-[#D8D8D8] text-sm font-bold mb-4">Preguntas de la Comunidad</Text>
-      <Text className="text-white text-5xl font-bold mb-4">{post.title}</Text>
-      <View className="flex flex-row items-center gap-5">
-        <Image
-          source={{ uri: post.student.profileImgLink }}
-          style={{ width: 30, height: 30, borderRadius: 50 }}
+        {/* <CommunityPostCard {...post} isDetail={true} isTouchable={false}/> */}
+        <Text className="text-[#D8D8D8] text-sm font-bold mb-4">Pregunta a Comunidad</Text>
+        <Text className="text-white text-5xl font-bold mb-4">{post.title}</Text>
+        <View className="flex flex-row items-center gap-5">
+          <Image
+            source={{ uri: post.student.profileImgLink }}
+            style={{ width: 30, height: 30, borderRadius: 50 }}
+          />
+          <Text className="text-sm text-white">
+            {post.student.firstName} {post.student.lastName}
+          </Text>
+          <Text className="text-sm text-white">Fecha: {post.date.toLocaleDateString()}</Text>
+        </View>
+        <Text className="text-white text-lg mt-4">{post.content}</Text>
+
+        <View className='flex flex-row mb-4 mt-10 items-center justify-between'>
+          <Text className="text-white text-lg font-bold mb-2">Respuestas ({post.answers?.length})</Text>
+          {/* boton para abrir modal */}
+          <Button
+            title="Responder"
+            onPress={handleOpenModal}
+          />
+
+        </View>
+        <FlatList
+          data={post.answers}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <CommunityPostCard {...item} isDetail={true} isTouchable={true} />}
+          contentContainerStyle={{ paddingBottom: 20 }}
         />
-        <Text className="text-sm text-white">
-          {post.student.firstName} {post.student.lastName}
-        </Text>
-        <Text className="text-sm text-white">Fecha: {post.date.toLocaleDateString()}</Text>
+        <View className="flex justify-end">
+          <Text className="text-gray-600 text-sm font-bold">©PISApp Copyright 2023</Text>
+        </View>
+
       </View>
-      <Text className="text-white text-lg mt-4">{post.content}</Text>
-
-      <Text className="text-white text-lg font-bold mb-2 mt-10">Respuestas ({post.answers?.length})</Text>
-      <FlatList
-        data={post.answers}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <CommunityPostCard {...item} isDetail={true} isTouchable={true} />}
-        contentContainerStyle={{ paddingBottom: 20 }}
-      />
-
-      <Text className="text-lg font-bold mb-2">Add a Question Title</Text>
-      <TextInput
-        value={communityPostAnswerTitle}
-        onChangeText={setCommunityPostAnswerTitle}
-        placeholder="Question Title"
-        className="bg-white p-2 mb-4"
-      />
-      <Text className="text-lg font-bold mb-2">Add a Question Content</Text>
-      <TextInput
-        value={communityPostAnswerContent}
-        onChangeText={setCommunityPostAnswerContent}
-        placeholder="Question Content"
-        className="bg-white p-2 mb-4"
-      />
-      <Button
-        title="Add Question"
-        onPress={handleAddQuestion}
-      />
     </View>
   );
 };
