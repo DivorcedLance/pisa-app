@@ -10,3 +10,5 @@ export type CommunityPost = {
     answers?: CommunityPost[];
     responseTo: string | null;
 }
+
+export type newCommunityPost = Pick<CommunityPost, 'studentId' | 'title' | 'content' | 'responseTo'>;

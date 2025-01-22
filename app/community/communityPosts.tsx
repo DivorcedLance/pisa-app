@@ -1,26 +1,45 @@
 import { View, Text, FlatList, TextInput, Button } from 'react-native';
-import { getCommunityPosts } from '@/lib/firebase/community';
-import { CommunityPost } from '@/types/communityPost';
+import { addCommunityPost, getCommunityPosts } from '@/lib/firebase/community';
+import { CommunityPost, newCommunityPost } from '@/types/communityPost';
 import { CommunityPostCard } from '@/components/CommunityPostCard';
 import { useEffect, useState } from 'react'
+import { useAuthStore } from '@/stores/authStore';
 
 const CommunityPostsScreen = () => {
   const [posts, setPosts] = useState<CommunityPost[]>([]);
-  const [newQuestion, setNewQuestion] = useState('');
+
+  const [newCommunityPostTitle, setNewCommunityPostTitle] = useState<string>('');
+  const [newCommunityPostContent, setNewCommunityPostContent] = useState<string>('');
+
+  const { user } = useAuthStore();
+
+  const fetchData = async () => {
+    const data = await getCommunityPosts();
+    setPosts(data.filter((post) => post.responseTo === null));
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await getCommunityPosts();
-      setPosts(data.filter((post) => post.responseTo === null));
-    };
-
     fetchData();
   }, []);
 
-  const handleAddQuestion = () => {
-    if (!newQuestion.trim()) return;
-    console.log('Add Question:', newQuestion);
-    setNewQuestion('');
+  const handleAddQuestion = async () => {
+    if (!user) return;
+    if (!newCommunityPostTitle || !newCommunityPostContent) {
+      alert('Please fill in the title and content of the question');
+      return;
+    }
+
+    await addCommunityPost({
+      studentId: user!.id,
+      title: newCommunityPostTitle,
+      content: newCommunityPostContent,
+      responseTo: null,
+    } as newCommunityPost);
+
+    await fetchData();
+    
+    setNewCommunityPostTitle('');
+    setNewCommunityPostContent('');
   }
 
   return (
@@ -43,14 +62,24 @@ const CommunityPostsScreen = () => {
         contentContainerStyle={{ paddingBottom: 20 }}
       />
 
-      <Text className="text-lg font-bold mb-2">Add a Question</Text>
+      <Text className="text-lg font-bold mb-2">Add a Question Title</Text>
       <TextInput
-        className="border rounded-md p-2 bg-white mb-4"
-        placeholder="Type your question here..."
-        value={newQuestion}
-        onChangeText={setNewQuestion}
+        value={newCommunityPostTitle}
+        onChangeText={setNewCommunityPostTitle}
+        placeholder="Question Title"
+        className="bg-white p-2 mb-4"
       />
-      <Button title="Submit Question" onPress={handleAddQuestion} />
+      <Text className="text-lg font-bold mb-2">Add a Question Content</Text>
+      <TextInput
+        value={newCommunityPostContent}
+        onChangeText={setNewCommunityPostContent}
+        placeholder="Question Content"
+        className="bg-white p-2 mb-4"
+      />
+      <Button
+        title="Add Question"
+        onPress={handleAddQuestion}
+      />
     </View>
   );
 };

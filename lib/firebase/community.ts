@@ -1,5 +1,5 @@
 
-import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
+import { collection, doc, addDoc, getDoc, getDocs, query, where } from "firebase/firestore";
 import { db } from "@/lib/firebase/firebaseConfig";
 
 import { CommonQuestion } from '@/types/commonQuestion';
@@ -104,4 +104,14 @@ export async function getCommunityPostById(id: string): Promise<CommunityPost | 
     ...postDoc.data(),
     date: new Date(postDoc.data().date.seconds * 1000),
   } as CommunityPost;
+}
+
+export async function addCommunityPost(communityPost: {studentId: string, title: string, content: string, responseTo: string | null}): Promise<void> {
+  await addDoc(collection(db, 'CommunityPost'), {
+    studentId: communityPost.studentId,
+    title: communityPost.title,
+    content: communityPost.content,
+    responseTo: communityPost.responseTo,
+    date: new Date(),
+  });
 }
