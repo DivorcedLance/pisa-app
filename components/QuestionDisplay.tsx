@@ -14,24 +14,35 @@ export const QuestionDisplay: React.FC<QuestionDisplayProps> = ({
   onSelectOption,
 }) => {
   return (
-    <View className="bg-[#262A28] p-4 rounded-md">
+    <View className="p-4 rounded-md">
       <Text className="text-white text-lg font-bold mb-2">{question.statement}</Text>
+      <View
+        style={{
+          flexDirection: "row",
+          flexWrap: "wrap",
+          justifyContent: "space-between",
+          marginHorizontal: -5,
+        }}
+      >
+        {question.options.map((option, index) => (
+          <TouchableOpacity
+            key={index}
+            onPress={() => onSelectOption(index)}
+            style={{
+              padding: 10,
+              backgroundColor: selectedOptionIndex === index ? "#595D5B" : "#FFFF",
+              borderRadius: 5,
+              marginBottom: 10,
+              marginHorizontal: 5,
+              width: "47%",
+              alignItems: "center",
+            }}
+          >
+            <Text style={{ color: "black", fontWeight: "bold" }}>{option}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
 
-      {/* Opciones */}
-      {question.options.map((option, index) => (
-        <TouchableOpacity
-          key={index}
-          onPress={() => onSelectOption(index)}
-          style={{
-            padding: 10,
-            backgroundColor: selectedOptionIndex === index ? "#595D5B" : "#262A28",
-            borderRadius: 5,
-            marginBottom: 5,
-          }}
-        >
-          <Text className="text-white">{option}</Text>
-        </TouchableOpacity>
-      ))}
     </View>
   );
 };

@@ -35,24 +35,33 @@ export default function CourseScreen() {
 
   return (
     <View className="flex-1 bg-[#1B1E1A] p-6">
-      <Text className="text-white text-3xl font-bold mb-6" style={{ color: selectedCourse.color }}>
-        {selectedCourse.name}
+      <Text className="text-white text-3xl font-bold text-left">
+        ¿Qué quieres aprender?
       </Text>
-      <ScrollView>
-        {selectedCourse.topics!
-          .sort((a, b) => a.index - b.index)
-          .map((topic) => (
-            <Pressable
-              key={topic.id}
-              className="bg-[#262A28] p-4 rounded-md mb-4"
-              onPress={() => {
-                router.push(`./../topic/${topic.id}`);
-              }}
-            >
-              <Text className="text-white text-lg font-bold">{topic.name}</Text>
-            </Pressable>
-          ))}
-      </ScrollView>
+      <Text className="text-gray-400 text-lg font-bold mb-16">Elige una opción</Text>
+      <ScrollView className="flex-1 p-4">
+  <View className="flex-row flex-wrap justify-between">
+    {selectedCourse.topics!
+      .sort((a, b) => a.index - b.index)
+      .map((topic) => (
+        <Pressable
+          key={topic.id}
+          className={`p-4 rounded-md mb-4`}
+          style={{
+            backgroundColor: selectedCourse.color,
+            width: "48%", // Dos columnas con un pequeño espacio entre ellas
+          }}
+          onPress={() => {
+            router.push(`./../topic/${topic.id}`);
+          }}
+        >
+          <Text className="text-white text-lg font-bold text-center">{topic.name}</Text>
+        </Pressable>
+      ))}
+  </View>
+</ScrollView>
+
+      <Text className="text-gray-600 text-sm font-bold mt-16">©PISApp Copyright 2023</Text>
     </View>
   );
 }

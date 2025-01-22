@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Pressable, ScrollView, ActivityIndicator } from "react-native";
+import { Picker } from '@react-native-picker/picker';
 import { useRouter } from "expo-router";
 import { useCourseStore } from "@/stores/courseStore";
 import { useConfigStore } from "@/stores/configStore";
+import { useAuthStore } from "@/stores/authStore";
 
 export default function coursesScreen() {
   const { courses, fetchCourses } = useCourseStore();
   const {selectLevelIndex, selectedLevelIndex } = useConfigStore();
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
+  const { user } = useAuthStore();
 
   useEffect(() => {
     const loadCourses = async () => {
@@ -21,7 +24,12 @@ export default function coursesScreen() {
 
   return (
     <View className="flex-1 bg-[#1B1E1A] p-6">
-      <Text className="text-white text-3xl font-bold mb-6">Seleccione un curso</Text>
+      {user && (
+        <Text className="text-white text-3xl font-bold text-left mb-4">
+          Bienvenido, {user.firstName} {user.lastName} 👋
+        </Text>
+      )}
+      <Text className="text-gray-400 text-lg font-bold mb-16">¿Qué deseas aprender hoy?</Text>
       {loading ? (
         <ActivityIndicator size="large" color="#E8B21A" />
       ) : (
@@ -29,7 +37,7 @@ export default function coursesScreen() {
           {Object.values(courses).map((course) => (
             <Pressable
               key={course.name}
-              className="mb-4 p-4 rounded-md"
+              className="mb-10 p-10 rounded-md w-56 self-center"
               style={{ backgroundColor: course.color }}
               onPress={() => {
                 router.push(`./course/${course.name}`)
@@ -39,29 +47,26 @@ export default function coursesScreen() {
             </Pressable>
           ))}
 
-          <View className="flex-1 bg-[#1B1E1A] p-6">
-            <Text className="text-white text-3xl font-bold mb-6">Seleccione un nivel</Text>
-            <ScrollView>
-              {Array.from({ length: 3 }, (_, index) => (
-                <Pressable
-                  key={index}
-                  className="mb-4 p-4 rounded-md"
-                  style={{ backgroundColor: selectedLevelIndex === index ? "#E8B21A" : "#3B3B3B" }}
-                  onPress={() => {
-                    selectLevelIndex(Number(index));
-                  }}
-                >
-                  <Text className="text-white text-xl font-bold text-center">{
-                    index === 0 ? "Básico" :
-                    index === 1 ? "Intermedio" :
-                    index === 2 ? "Avanzado" : null
-                  }</Text>
-                </Pressable>
-              ))}
-            </ScrollView>
+            <Text className="text-white text-lg mb-6 self-center">Dificultad</Text>
+            
+          <View className="flex-1 bg-[#3B3B3B] mb-4 rounded-lg w-60 self-center p-0">
+            
+            <Picker
+              selectedValue={selectedLevelIndex}
+              onValueChange={(itemValue) => selectLevelIndex(itemValue)}
+              className="text-white text-lg font-bold"
+              style={{ color: "white" }}
+              dropdownIconColor="white"
+            >
+              <Picker.Item label="Básico" value={0}/>
+              <Picker.Item label="Intermedio" value={1} />
+              <Picker.Item label="Avanzado" value={2} />
+            </Picker>
+            
           </View>
         </ScrollView>
       )}
+      <Text className="text-gray-600 text-sm font-bold mt-16">©PISApp Copyright 2023</Text>
     </View>
   );
 }
