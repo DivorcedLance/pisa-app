@@ -43,8 +43,8 @@ const CommunityPostsScreen = () => {
   }
 
   return (
-    <View className="flex-1 p-4 bg-gray-100">
-      <Text className="text-2xl font-bold mb-4">Community Posts</Text>
+    <View className="flex-1 p-4 bg-[#1B1E1A]">
+      <Text className="text-white text-2xl font-bold mb-4">Preguntas de la Comunidad</Text>
       <FlatList
         data={posts}
         keyExtractor={(item) => item.id}
