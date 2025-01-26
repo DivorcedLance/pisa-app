@@ -1,5 +1,6 @@
 import { addDoc, collection, doc, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { db } from "@/lib/firebase/firebaseConfig";
+import { StudentTopic } from "@/types/studentTopic";
 
 export type Evaluation = {
   id: string;
@@ -10,7 +11,7 @@ export type Evaluation = {
   totalScore: number;
 
   questions: Question[];
-  
+
   currentScore?: number;
   weightedScore?: number;
   date?: Date;
@@ -78,7 +79,7 @@ export async function getEvaluationDataById(evaluationId: string, studentId: str
   if (!studentEvaluationSnap.empty) {
     // Obtener los datos del primer documento encontrado
     const studentEvaluationData = studentEvaluationSnap.docs[0].data();
-      // Retornar la evaluación consolidada
+    // Retornar la evaluación consolidada
 
     return {
       id: evaluationId,
@@ -100,7 +101,7 @@ export async function getEvaluationDataById(evaluationId: string, studentId: str
 }
 
 
-export async function registerEvaluationSolution(solution: {studentId: string, evaluationId: string, currentScore: number, selectedOptionIndexs: number[], topicId: string}): Promise<void> {
+export async function registerEvaluationSolution(solution: { studentId: string, evaluationId: string, currentScore: number, selectedOptionIndexs: number[], topicId: string }): Promise<void> {
   const evaluation = await getEvaluationDataById(solution.evaluationId, solution.studentId);
 
   // Referencia a la colección StudentEvaluation
@@ -120,32 +121,16 @@ export async function registerEvaluationSolution(solution: {studentId: string, e
   // Calcular el weightedScore
   const weightedScore = solution.currentScore / evaluation.totalScore;
 
-  // Si ya ha respondido la evaluación
-  if (!studentEvaluationSnap.empty) {
-    // Obtener el ID del documento
-    const studentEvaluationId = studentEvaluationSnap.docs[0].id;
+  // Crear una nueva respuesta
+  await addDoc(studentEvaluationRef, {
+    studentId: solution.studentId,
+    evaluationId: solution.evaluationId,
+    currentScore: solution.currentScore,
+    date,
+    selectedOptionIndexs: solution.selectedOptionIndexs,
+    weightedScore,
+  });
 
-    // Crear una referencia al documento
-    const studentEvaluationDocRef = doc(studentEvaluationRef, studentEvaluationId);
-
-    // Actualizar la respuesta
-    await updateDoc(studentEvaluationDocRef, {
-      currentScore: solution.currentScore,
-      date,
-      selectedOptionIndexs: solution.selectedOptionIndexs,
-      weightedScore,
-    });
-  } else {
-    // Crear una nueva respuesta
-    await addDoc(studentEvaluationRef, {
-      studentId: solution.studentId,
-      evaluationId: solution.evaluationId,
-      currentScore: solution.currentScore,
-      date,
-      selectedOptionIndexs: solution.selectedOptionIndexs,
-      weightedScore,
-    });
-  }
 
   //REVISAR BIEN ESTA PARTE
 
@@ -156,7 +141,7 @@ export async function registerEvaluationSolution(solution: {studentId: string, e
   const studentTopicQuery = query(
     studentTopicRef,
     where("studentId", "==", solution.studentId),
-    where("topicId", "==", evaluation.level.name)
+    where("topicId", "==", solution.topicId)
   );
   const studentTopicSnap = await getDocs(studentTopicQuery);
 
@@ -168,20 +153,21 @@ export async function registerEvaluationSolution(solution: {studentId: string, e
     // Crear una referencia al documento
     const studentTopicDocRef = doc(studentTopicRef, studentTopicId);
 
+    const studentTopicData = studentTopicSnap.docs[0].data() as StudentTopic;
+
+    const updatedWeightedScores = { ...studentTopicData.weightedScores, [evaluation.level.name]: weightedScore };
+    
     // Actualizar la respuesta
     await updateDoc(studentTopicDocRef, {
-      weightedScores: [
-        ...studentTopicSnap.docs[0].data().weightedScores,
-        weightedScore,
-      ],
-      weightedScore: studentTopicSnap.docs[0].data().weightedScores.reduce((acc: number, curr: number) => acc + curr, 0) / studentTopicSnap.docs[0].data().weightedScores.length,
+      weightedScores: updatedWeightedScores,
+      weightedScore: Object.values(updatedWeightedScores).reduce((acc: number, score: number) => acc + score, 0) / Object.values(updatedWeightedScores).length,
     });
   } else {
     // Crear una nueva respuesta
     await addDoc(studentTopicRef, {
       studentId: solution.studentId,
       topicId: solution.topicId,
-      weightedScores: [weightedScore],
+      weightedScores: { [evaluation.level.name]: weightedScore },
       weightedScore,
     });
   }

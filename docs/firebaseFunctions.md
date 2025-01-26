@@ -676,7 +676,7 @@ Evaluation
 # Firebase Functions to post data
 
 ## registerStudentInSection()
-
+<// Para el director
 ### Toma:
 ```json
 {
@@ -728,7 +728,7 @@ en User.id == req.studentId
 }
 ```
 
-## registerEvaluationSolution()
+## registerEvaluationSolution() [HECHO]
 
 ### Toma:
 ```json
@@ -803,7 +803,7 @@ evaluation = getEvaluationById(req.evaluationId)
 <!-- * Nota importante -->
 # Sobre la creación de logros por defecto
 
-createAchievement()
+createAchievement() 
 
 #### Logros de Topics
 
