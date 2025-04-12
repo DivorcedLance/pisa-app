@@ -1,6 +1,7 @@
-import { addDoc, collection, doc, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, query, Timestamp, updateDoc, where } from "firebase/firestore";
 import { db } from "@/lib/firebase/firebaseConfig";
 import { StudentTopic } from "@/types/studentTopic";
+import { getAchievementByTopicId, getStudentAchievementByStudentIdAndAchievementId, getTierByWeightedScore, updateStudentAchievement } from "./achievement";
 
 export type Evaluation = {
   id: string;
@@ -101,7 +102,7 @@ export async function getEvaluationDataById(evaluationId: string, studentId: str
 }
 
 
-export async function registerEvaluationSolution(solution: { studentId: string, evaluationId: string, currentScore: number, selectedOptionIndexs: number[], topicId: string }): Promise<void> {
+export async function registerEvaluationSolution(solution: { studentId: string, evaluationId: string, currentScore: number, selectedOptionIndexs: number[], topicId: string }): Promise<HaTopicWeightedScoreParams | null> {
   const evaluation = await getEvaluationDataById(solution.evaluationId, solution.studentId);
 
   // Referencia a la colección StudentEvaluation
@@ -121,16 +122,28 @@ export async function registerEvaluationSolution(solution: { studentId: string, 
   // Calcular el weightedScore
   const weightedScore = solution.currentScore / evaluation.totalScore;
 
-  // Crear una nueva respuesta
-  await addDoc(studentEvaluationRef, {
-    studentId: solution.studentId,
-    evaluationId: solution.evaluationId,
-    currentScore: solution.currentScore,
-    date,
-    selectedOptionIndexs: solution.selectedOptionIndexs,
-    weightedScore,
-  });
 
+  if (!studentEvaluationSnap.empty) {
+    // Ya existe una respuesta: actualizar
+    const docId = studentEvaluationSnap.docs[0].id;
+    const docRef = doc(studentEvaluationRef, docId);
+    await updateDoc(docRef, {
+      currentScore: solution.currentScore,
+      date,
+      selectedOptionIndexs: solution.selectedOptionIndexs,
+      weightedScore,
+    });
+  } else {
+    // No existe: crear nueva
+    await addDoc(studentEvaluationRef, {
+      studentId: solution.studentId,
+      evaluationId: solution.evaluationId,
+      currentScore: solution.currentScore,
+      date,
+      selectedOptionIndexs: solution.selectedOptionIndexs,
+      weightedScore,
+    });
+  }
 
   //REVISAR BIEN ESTA PARTE
 
@@ -156,12 +169,28 @@ export async function registerEvaluationSolution(solution: { studentId: string, 
     const studentTopicData = studentTopicSnap.docs[0].data() as StudentTopic;
 
     const updatedWeightedScores = { ...studentTopicData.weightedScores, [evaluation.level.name]: weightedScore };
-    
+
+    const totalWeightedScore = Object.values(updatedWeightedScores).reduce((acc: number, score: number) => acc + score, 0) / Object.values(updatedWeightedScores).length
+
     // Actualizar la respuesta
     await updateDoc(studentTopicDocRef, {
       weightedScores: updatedWeightedScores,
-      weightedScore: Object.values(updatedWeightedScores).reduce((acc: number, score: number) => acc + score, 0) / Object.values(updatedWeightedScores).length,
+      weightedScore: totalWeightedScore,
     });
+
+    //haTopicWeightedScore()
+    const hato = await haTopicWeightedScore({
+      studentId: solution.studentId,
+      topicId: solution.topicId,
+      newWeightedScore: totalWeightedScore,
+      date,
+    });
+
+    if (!hato) {
+      throw new Error("Failed to calculate HaTopicWeightedScoreParams.");
+    }
+
+    return hato as HaTopicWeightedScoreParams;
   } else {
     // Crear una nueva respuesta
     await addDoc(studentTopicRef, {
@@ -170,5 +199,91 @@ export async function registerEvaluationSolution(solution: { studentId: string, 
       weightedScores: { [evaluation.level.name]: weightedScore },
       weightedScore,
     });
+    //haTopicWeightedScore()
+    const hato = await haTopicWeightedScore({
+      studentId: solution.studentId,
+      topicId: solution.topicId,
+      newWeightedScore: weightedScore,
+      date,
+    });
+    if (!hato) {
+      throw new Error("Failed to calculate HaTopicWeightedScoreParams.");
+    }
+    return hato as HaTopicWeightedScoreParams;
   }
+
+}
+
+type HaTopicWeightedScoreParams = {
+  id: string;
+  date: Timestamp;
+  currentProgress: number;
+  tierId: string;
+  achievement: {
+    id: string;
+    description: string;
+    achievementTypeId: string;
+    totalProgress: number;
+    course: {
+      name: string;
+      color: string;
+    }
+    topic: {
+      id: string;
+      name: string;
+      index: number;
+    }
+  },
+  totalProgress: number;
+};
+
+
+//Debe verificar si el nuevo valor de Topic.weightedScore desbloquea un nuevo logro
+export async function haTopicWeightedScore({ studentId, topicId, newWeightedScore, date }: { studentId: string, topicId: string, newWeightedScore: number, date: Date }) {
+  // Obtener el logro de tipo 1 (Topic) con topicId == req.topicId
+  const achievement = await getAchievementByTopicId(topicId);
+
+  // Obtener el estado actual del logro del estudiante
+  if (!achievement) {
+    throw new Error(`Achievement for topicId "${topicId}" not found`);
+  }
+  const studentAchievement = await getStudentAchievementByStudentIdAndAchievementId(studentId, achievement.id);
+
+  // Obtener el nuevo nivel
+  const newTier = await getTierByWeightedScore(newWeightedScore);
+  if (!newTier) {
+    console.warn("No tier matched the weighted score:", newWeightedScore);
+    return null;
+  }
+
+  const shouldUpdate = !studentAchievement || newTier.id !== studentAchievement.tierId;
+
+
+  if (shouldUpdate) {
+    console.log("Updating student achievement:")
+    const newStudentAchievement = updateStudentAchievement({
+      studentId,
+      achievementId: achievement.id,
+      date: date.toISOString(),
+      currentProgress: newWeightedScore,
+      tierId: newTier.id,
+    });
+    return newStudentAchievement;
+  }
+  console.log("No update needed for student achievement.");
+  return {
+    id: "",
+    date: Timestamp.fromDate(new Date()),
+    currentProgress: 0,
+    tierId: "",
+    achievement: {
+      id: "",
+      description: "",
+      achievementTypeId: "",
+      totalProgress: 0,
+      course: { name: "", color: "" }, // fallback si es null
+      topic: { id: "", name: "", index: 0 }, // fallback si es null
+    },
+    totalProgress: 0,
+  };
 }

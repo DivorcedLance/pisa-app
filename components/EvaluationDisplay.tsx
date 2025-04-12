@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { View, Text, Button, Alert } from "react-native";
 import { QuestionDisplay } from "@/components/QuestionDisplay";
 import { SolutionDisplay } from "@/components/SolutionDisplay";
-import { Evaluation } from "@/lib/firebase/evaluation";
+import { Evaluation, registerEvaluationSolution } from "@/lib/firebase/evaluation";
+import { useCourseStore } from "@/stores/courseStore";
 
 type EvaluationDisplayProps = {
   evaluation: Evaluation;
@@ -20,6 +21,7 @@ export const EvaluationDisplay: React.FC<EvaluationDisplayProps> = ({ evaluation
     return null;
   }
 
+  const { selectedCourse, selectedTopic } = useCourseStore();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
   const [showSolution, setShowSolution] = useState(false);
@@ -32,7 +34,7 @@ export const EvaluationDisplay: React.FC<EvaluationDisplayProps> = ({ evaluation
     setSelectedOptions(updatedOptions);
   };
 
-  const handleNextQuestion = () => {
+  const handleNextQuestion = async () => {
     if (currentQuestionIndex < evaluation.questions.length - 1) {
       setShowSolution(false);
       setCurrentQuestionIndex(currentQuestionIndex + 1);
@@ -50,10 +52,13 @@ export const EvaluationDisplay: React.FC<EvaluationDisplayProps> = ({ evaluation
         selectedOptionIndexs: selectedOptions,
         currentScore,
         date: new Date(),
+        //usando selectedTopic de courseStore 
+        topicId: selectedTopic?.id ?? "unknown",
       };
 
-      console.log(result);
-      Alert.alert("Evaluación completada", "Revisa la consola para los resultados");
+      console.log("Resultado de la evaluación:", result);
+      const evaluationRegistered = await registerEvaluationSolution(result); // Guarda el resultado en la base de datos
+      console.log("Evaluación registrada:", evaluationRegistered);
     }
   };
 

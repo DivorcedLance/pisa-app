@@ -801,7 +801,7 @@ evaluation = getEvaluationById(req.evaluationId)
 ```
 
 <!-- * Nota importante -->
-# Sobre la creación de logros por defecto
+# Sobre la creación de logros por defecto [HECHO]
 
 createAchievement() 
 
@@ -822,7 +822,7 @@ Al crear un topic este debe crear un achievement por defecto con los siguientes 
 
 # Firebase Functions to handle achivements
 
-## updateStudentAchievement()
+## updateStudentAchievement() [HECHO]
 
 ### Toma:
 ```json
@@ -905,7 +905,7 @@ StudentAchievement
     }
 ```
 
-## haTopicWeightedScore()
+## haTopicWeightedScore() [FALTA]
 
 Debe verificar si el nuevo valor de Topic.weightedScore desbloquea un nuevo logro
 

@@ -43,15 +43,15 @@ const courses: Course[] = [
 //platinables
 const logros : Logro[] = [
   {
-    achievementTypeId: "1",
+    achievementTypeId: "0",
     courseId: "Matemáticas",
-    description: "Completa el topico Algebra para obtener este logro",
+    description: "Completa el topico Algebra nivel basico para obtener este logro",
     name: "Logro de Algebra",
     totalProgress: 3,
     currentProgress: 1
   },
   {
-    achievementTypeId: "2",
+    achievementTypeId: "1",
     courseId: "Ciencias",
     description: "Completa el topico Dinamica para obtener este logro",
     name: "Logro de Dinamica",
@@ -59,7 +59,7 @@ const logros : Logro[] = [
     currentProgress: 2
   },
   {
-    achievementTypeId: "3",
+    achievementTypeId: "2",
     courseId: "Lectura",
     description: "Completa el topico Parrafos para obtener este logro",
     name: "Logro de Parrafos",
@@ -67,7 +67,7 @@ const logros : Logro[] = [
     currentProgress: 2
   },
   {
-    achievementTypeId: "4",
+    achievementTypeId: "1",
     courseId: "Ciencias",
     description: "Completa el topico Estatica para obtener este logro",
     name: "Logro de Estatica",
@@ -75,7 +75,7 @@ const logros : Logro[] = [
     currentProgress: 1
   },
   {
-    achievementTypeId: "5",
+    achievementTypeId: "1",
     courseId: "Matemáticas",
     description: "Completa el topico Geometria para obtener este logro",
     name: "Logro de Geometria",
@@ -83,7 +83,7 @@ const logros : Logro[] = [
     currentProgress: 3
   },
   {
-    achievementTypeId: "6",
+    achievementTypeId: "1",
     courseId: "Matemáticas",
     description: "Completa el topico Aritmetica para obtener este logro",
     name: "Logro de Aritmetica",
@@ -91,7 +91,7 @@ const logros : Logro[] = [
     currentProgress: 2
   },
   {
-    achievementTypeId: "7",
+    achievementTypeId: "1",
     courseId: "Matemáticas",
     description: "Completa el topico Geometria para obtener este logro",
     name: "Logro de Geometria",
