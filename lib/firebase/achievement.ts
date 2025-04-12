@@ -32,8 +32,7 @@ export async function createAchievement({
   
   try {
     // Guardar el logro en Firestore
-    const achievementRef = doc(db, "Achievement"); // Usa el ID generado como identificador del logro
-    await setDoc(achievementRef, achievementData);
+    const achievementRef = await addDoc(collection(db, "Achievement"), achievementData);
     
     const achievementSnap = await getDoc(achievementRef);
     if (!achievementSnap.exists()) {

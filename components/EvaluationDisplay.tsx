@@ -56,9 +56,21 @@ export const EvaluationDisplay: React.FC<EvaluationDisplayProps> = ({ evaluation
         topicId: selectedTopic?.id ?? "unknown",
       };
 
-      console.log("Resultado de la evaluación:", result);
+      // console.log("Resultado de la evaluación:", result);
       const evaluationRegistered = await registerEvaluationSolution(result); // Guarda el resultado en la base de datos
-      console.log("Evaluación registrada:", evaluationRegistered);
+      // console.log("Evaluación registrada:", evaluationRegistered);
+      Alert.alert(
+        "Evaluación finalizada",
+        `Has completado la evaluación. Tu puntuación es ${currentScore} de ${evaluation.totalScore}.`,
+        [
+          {
+            text: "Aceptar",
+            onPress: () => {
+              // Aquí puedes navegar a otra pantalla o realizar otra acción
+            },
+          },
+        ]
+      );
     }
   };
 

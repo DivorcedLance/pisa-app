@@ -1,5 +1,6 @@
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, setDoc, Timestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase/firebaseConfig";
+import { differenceInCalendarDays } from "date-fns";
 
 export type UserData = {
   id: string;
@@ -44,7 +45,7 @@ export async function getUserDataByEmail(email: string): Promise<UserData | null
 export async function getUserDataById(id: string): Promise<UserData | null> {
   const docRef = doc(db, "User", id);
   const docSnap = await getDoc(docRef);
-  
+
   // Verificar si existe el documento
   if (!docSnap.exists()) {
     return null;
@@ -59,3 +60,161 @@ export async function getUserDataById(id: string): Promise<UserData | null> {
     birthDate: new Date(userData.birthDate.seconds * 1000),
   } as UserData;
 }
+
+
+export async function createStudent({
+  email,
+  firstName,
+  lastName,
+  telephone,
+  profileImgLink,
+  documentType,
+  documentNumber,
+  birthDate, // El birthDate es un objeto Date de JavaScript
+}: {
+  email: string;
+  firstName: string;
+  lastName: string;
+  telephone: string;
+  profileImgLink: string;
+  documentType: string;
+  documentNumber: string;
+  birthDate: Date; // Asegúrate de que sea un Date de JS
+}) {
+  // Validación básica
+  if (
+    !email ||
+    !firstName ||
+    !lastName ||
+    !telephone ||
+    !documentType ||
+    !documentNumber ||
+    !birthDate
+  ) {
+    throw new Error("Todos los campos son obligatorios.");
+  }
+
+  // Convertir el birthDate (Date de JS) a un Timestamp de Firestore
+  const birthDateTimestamp = Timestamp.fromDate(new Date(birthDate)); // Aquí se convierte el Date de JS a Timestamp
+
+  const studentData = {
+    email,
+    firstName,
+    lastName,
+    telephone,
+    profileImgLink,
+    documentType,
+    documentNumber,
+    birthDate: birthDateTimestamp, // Pasa el Timestamp a Firestore
+    type: "student",
+    rolData: {
+      sectionId: "", // Inicialmente vacío
+    },
+    lastVisit: "",
+    streak: 0,
+  };
+
+  try {
+    // Guardar en Firestore
+    
+    const userRef = await addDoc(collection(db, "User"), studentData); // Usa el ID como identificador del documento
+    return { id: userRef.id, ...studentData };
+  } catch (error) {
+    console.error("Error al crear el estudiante:", error);
+    throw new Error("Error al crear el estudiante.");
+  }
+}
+
+
+export async function createTeacher({
+  email,
+  firstName,
+  lastName,
+  telephone,
+  profileImgLink,
+  documentType,
+  documentNumber,
+  birthDate,
+}: {
+  email: string;
+  firstName: string;
+  lastName: string;
+  telephone: string;
+  profileImgLink: string;
+  documentType: string;
+  documentNumber: string;
+  birthDate: Date; // ISO 8601 date string
+}) {
+  // Validación básica
+  if (
+    !email ||
+    !firstName ||
+    !lastName ||
+    !telephone ||
+    !documentType ||
+    !documentNumber ||
+    !birthDate
+  ) {
+    throw new Error("Todos los campos son obligatorios.");
+  }
+
+  const birthDateTimestamp = Timestamp.fromDate(new Date(birthDate));
+
+  const teacherData = {
+    email,
+    firstName,
+    lastName,
+    telephone,
+    profileImgLink,
+    documentType,
+    documentNumber,
+    birthDate: birthDateTimestamp,
+    type: "teacher",
+    rolData: {
+      sectionIds: [] as string[],
+    },
+  };
+
+  try {
+    // Guardar en Firestore
+    const userRef = await addDoc(collection(db, "User"), teacherData); // Usa el ID como identificador del documento
+    return { id: userRef.id, ...teacherData };
+  } catch (error) {
+    console.error("Error al crear el profesor:", error);
+    throw new Error("Error al crear el profesor.");
+  }
+}
+
+
+const getToday = () => new Date().toISOString().split("T")[0];
+
+export const updateStreak = async (userId: string): Promise<number> => {
+  const today = getToday();
+  const userRef = doc(db, "User", userId);
+  const userSnap = await getDoc(userRef);
+
+  let newStreak = 1;
+
+  if (userSnap.exists()) {
+    const data = userSnap.data();
+    const lastVisit = data.lastVisit;
+    const streak = data.streak || 0;
+
+    const diff = differenceInCalendarDays(new Date(today), new Date(lastVisit));
+
+    if (diff === 1) {
+      newStreak = streak + 1;
+    } else if (diff === 0) {
+      newStreak = streak;
+    } else {
+      newStreak = 1;
+    }
+  }
+
+  await setDoc(userRef, {
+    lastVisit: today,
+    streak: newStreak
+  }, { merge: true });
+
+  return newStreak;
+};
