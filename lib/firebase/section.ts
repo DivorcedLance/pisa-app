@@ -1,6 +1,7 @@
 import { addDoc, collection, doc, getDoc, getDocs, query, Timestamp, updateDoc, where } from "firebase/firestore";
 import { db } from "@/lib/firebase/firebaseConfig";
 import { Section } from "@/types/section";
+import { Student } from "@/types/student";
 
 export async function getSectionStudents(sectionId: string) {
   const sectionRef = doc(db, "Section", sectionId);
@@ -20,7 +21,8 @@ export async function getSectionStudents(sectionId: string) {
     }))
   );
 
-  return Promise.all(studentPromises);
+  const students = await Promise.all(studentPromises);
+  return students as Student[];
 }
 
 export async function getSectionsByTeacherId(teacherId: string) {
