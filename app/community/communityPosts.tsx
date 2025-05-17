@@ -5,6 +5,7 @@ import { CommunityPostCard } from '@/components/CommunityPostCard';
 import { useEffect, useState } from 'react'
 import { useAuthStore } from '@/stores/authStore';
 import { ModalDisplay } from '@/components/ModalDisplay';
+import { Stack } from 'expo-router';
 
 const CommunityPostsScreen = () => {
   const [posts, setPosts] = useState<CommunityPost[]>([]);
@@ -48,42 +49,51 @@ const CommunityPostsScreen = () => {
   }
 
   return (
-    <View className="flex-1">
-      {/* modal */}
-      <ModalDisplay modalVisible={modalVisible} setModalVisible={setModalVisible} setNewCommunityPostContent={setNewCommunityPostContent} setNewCommunityPostTitle={setNewCommunityPostTitle} handleAddQuestion={handleAddQuestion} newCommunityPostContent={newCommunityPostContent} newCommunityPostTitle={newCommunityPostTitle}/>
+    <>
+      <Stack.Screen
+        options={{
+          title: 'Comunidad',
+          headerTitleStyle: { fontSize: 18 } // Estilos personalizados
+        }}
+      />
+      <View className="flex-1">
+        {/* modal */}
+        <ModalDisplay modalVisible={modalVisible} setModalVisible={setModalVisible} setNewCommunityPostContent={setNewCommunityPostContent} setNewCommunityPostTitle={setNewCommunityPostTitle} handleAddQuestion={handleAddQuestion} newCommunityPostContent={newCommunityPostContent} newCommunityPostTitle={newCommunityPostTitle} />
 
-      <View className="flex-1 p-4 bg-[#1B1E1A]">
-        <Text className="text-white text-2xl font-bold mb-4">Preguntas de la Comunidad</Text>
-        <View className='mb-4'>
-          {/* boton para abrir modal */}
-          <Button
-            title="Hacer pregunta"
-            onPress={handleOpenModal}
-          />
-
-        </View>
-        <FlatList
-          data={posts}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <CommunityPostCard
-              id={item.id}
-              title={item.title}
-              content={item.content}
-              date={item.date}
-              student={item.student!}
-              isDetail={false}
-              isTouchable={true}
+        <View className="flex-1 p-4 bg-[#1B1E1A]">
+          <Text className="text-white text-2xl font-bold mb-4">Preguntas de la Comunidad</Text>
+          <View className='mb-4'>
+            {/* boton para abrir modal */}
+            <Button
+              title="Hacer pregunta"
+              onPress={handleOpenModal}
             />
-          )}
-          contentContainerStyle={{ paddingBottom: 20 }}
-        />
-        <View className="flex justify-end">
-          <Text className="text-gray-600 text-sm font-bold">©PISApp Copyright 2023</Text>
-        </View>
-      </View>
 
-    </View>
+          </View>
+          <FlatList
+            data={posts}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <CommunityPostCard
+                id={item.id}
+                title={item.title}
+                content={item.content}
+                date={item.date}
+                student={item.student!}
+                isDetail={false}
+                isTouchable={true}
+              />
+            )}
+            contentContainerStyle={{ paddingBottom: 20 }}
+          />
+          <View className="flex justify-end">
+            <Text className="text-gray-600 text-sm font-bold">©PISApp Copyright 2023</Text>
+          </View>
+        </View>
+
+      </View>
+    </>
+
   );
 };
 

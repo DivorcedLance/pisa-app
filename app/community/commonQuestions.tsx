@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { View, Text, FlatList, Pressable } from 'react-native';
-import { useRouter } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 import { getCommonQuestions } from '@/lib/firebase/community';
 import { CommonQuestion } from '@/types/commonQuestion';
 import { RightArrowIcon } from '@/components/Icons';
@@ -42,15 +42,24 @@ const CommonQuestionsScreen = () => {
   }, []);
 
   return (
-    <View className="flex-1 p-4 bg-[#1B1E1A]">
-      <Text className="text-2xl text-white font-bold mb-4">Preguntas Frecuentes</Text>
-      <FlatList
-        data={commonQuestions}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <CommonQuestionCard id={item.id} question={item.question} answer={item.answer} />}
-        contentContainerStyle={{ paddingBottom: 20 }}
+    <>
+      <Stack.Screen
+        options={{
+          title: 'Preguntas Frecuentes',
+          headerTitleStyle: { fontSize: 18 } // Estilos personalizados
+        }}
       />
-    </View>
+      <View className="flex-1 p-4 bg-[#1B1E1A]">
+        <Text className="text-2xl text-white font-bold mb-4">Preguntas Frecuentes</Text>
+        <FlatList
+          data={commonQuestions}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <CommonQuestionCard id={item.id} question={item.question} answer={item.answer} />}
+          contentContainerStyle={{ paddingBottom: 20 }}
+        />
+      </View>
+    
+    </>
   );
 };
 

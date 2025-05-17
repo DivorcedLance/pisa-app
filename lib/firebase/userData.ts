@@ -1,4 +1,4 @@
-import { addDoc, collection, doc, getDoc, getDocs, setDoc, Timestamp } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, query, setDoc, Timestamp, where } from "firebase/firestore";
 import { db } from "@/lib/firebase/firebaseConfig";
 import { differenceInCalendarDays } from "date-fns";
 
@@ -12,12 +12,14 @@ export type UserData = {
   documentType: string;
   documentNumber: string;
   birthDate: Date;
-  type: "student" | "teacher";
+  type: "student" | "teacher" | "admin";
   rolData: {
     sectionId: string;
   } | {
     sectionIds: string[];
   };
+  lastVisit?: string;
+  streak?: number;
 };
 
 export async function getUserDataByEmail(email: string): Promise<UserData | null> {
@@ -188,10 +190,12 @@ export async function createTeacher({
 
 const getToday = () => new Date().toISOString().split("T")[0];
 
-export const updateStreak = async (userId: string): Promise<number> => {
+export const updateStreak = async (email: string): Promise<number> => {
   const today = getToday();
-  const userRef = doc(db, "User", userId);
-  const userSnap = await getDoc(userRef);
+  //buscar el usuario por email en la base de datos
+  const userQuery = query(collection(db, "User"), where("email", "==", email));
+  const userRef = await getDocs(userQuery);
+  const userSnap = userRef.docs[0];
 
   let newStreak = 1;
 
@@ -203,15 +207,18 @@ export const updateStreak = async (userId: string): Promise<number> => {
     const diff = differenceInCalendarDays(new Date(today), new Date(lastVisit));
 
     if (diff === 1) {
+      console.log("Streak continued.");
       newStreak = streak + 1;
     } else if (diff === 0) {
+      console.log("Streak already counted today.");
       newStreak = streak;
     } else {
+      console.log("Streak reset due to inactivity.");
       newStreak = 1;
     }
   }
 
-  await setDoc(userRef, {
+  await setDoc(userSnap.ref, {
     lastVisit: today,
     streak: newStreak
   }, { merge: true });

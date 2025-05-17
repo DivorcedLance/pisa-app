@@ -25,10 +25,12 @@ export const EvaluationDisplay: React.FC<EvaluationDisplayProps> = ({ evaluation
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
   const [showSolution, setShowSolution] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const currentQuestion = evaluation.questions[currentQuestionIndex];
 
   const handleOptionSelect = (index: number) => {
+    console.log("Opción seleccionada:", index);
     const updatedOptions = [...selectedOptions];
     updatedOptions[currentQuestionIndex] = index;
     setSelectedOptions(updatedOptions);
@@ -57,8 +59,10 @@ export const EvaluationDisplay: React.FC<EvaluationDisplayProps> = ({ evaluation
       };
 
       // console.log("Resultado de la evaluación:", result);
+      setIsSubmitting(true); // Deshabilita el botón mientras se guarda
       const evaluationRegistered = await registerEvaluationSolution(result); // Guarda el resultado en la base de datos
-      // console.log("Evaluación registrada:", evaluationRegistered);
+      setIsSubmitting(false); // Habilita el botón nuevamente
+      console.log("Evaluación registrada:", evaluationRegistered);
       Alert.alert(
         "Evaluación finalizada",
         `Has completado la evaluación. Tu puntuación es ${currentScore} de ${evaluation.totalScore}.`,
@@ -110,6 +114,7 @@ export const EvaluationDisplay: React.FC<EvaluationDisplayProps> = ({ evaluation
         }
         onPress={handleNextQuestion}
         color="#2196F3"
+        disabled={isSubmitting} // Deshabilita el botón mientras se guarda
       />
     </View>
   );

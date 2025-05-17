@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Image } from "react-native";
 import { Question } from "@/lib/firebase/evaluation";
 
 type QuestionDisplayProps = {
@@ -16,6 +16,19 @@ export const QuestionDisplay: React.FC<QuestionDisplayProps> = ({
   return (
     <View className="p-4 rounded-md">
       <Text className="text-white text-lg font-bold mb-2">{question.statement}</Text>
+      {/* Mostrar la imagen si existe en la pregunta */}
+      {question.questionImgLink ? (
+        <Image
+          source={{ uri: question.questionImgLink }}
+          style={{
+            width: "100%",
+            height: 500,
+            borderRadius: 10,
+            marginBottom: 20,
+          }}
+          resizeMode="contain"
+        />
+      ) : null}
       <View
         style={{
           flexDirection: "row",

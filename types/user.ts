@@ -8,5 +8,5 @@ export type User = {
   profilePictureLink: string;
   birthDate: string;
   documentNumber: string;
-  type: 'student' | 'teacher';
+  type: 'student' | 'teacher' | 'admin';
 };

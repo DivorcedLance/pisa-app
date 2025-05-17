@@ -170,7 +170,7 @@ export async function registerEvaluationSolution(solution: { studentId: string, 
 
     const updatedWeightedScores = { ...studentTopicData.weightedScores, [evaluation.level.name]: weightedScore };
 
-    const totalWeightedScore = Object.values(updatedWeightedScores).reduce((acc: number, score: number) => acc + score, 0) / Object.values(updatedWeightedScores).length
+    const totalWeightedScore = Object.values(updatedWeightedScores).reduce((acc: number, score: number) => acc + score, 0) / 3.0
 
     // Actualizar la respuesta
     await updateDoc(studentTopicDocRef, {
@@ -197,13 +197,13 @@ export async function registerEvaluationSolution(solution: { studentId: string, 
       studentId: solution.studentId,
       topicId: solution.topicId,
       weightedScores: { [evaluation.level.name]: weightedScore },
-      weightedScore,
+      weightedScore: weightedScore/3.0,
     });
     //haTopicWeightedScore()
     const hato = await haTopicWeightedScore({
       studentId: solution.studentId,
       topicId: solution.topicId,
-      newWeightedScore: weightedScore,
+      newWeightedScore: weightedScore/3.0,
       date,
     });
     if (!hato) {
@@ -248,15 +248,16 @@ export async function haTopicWeightedScore({ studentId, topicId, newWeightedScor
     throw new Error(`Achievement for topicId "${topicId}" not found`);
   }
   const studentAchievement = await getStudentAchievementByStudentIdAndAchievementId(studentId, achievement.id);
+  console.log("Student Achievement HATO:", studentAchievement);
 
   // Obtener el nuevo nivel
   const newTier = await getTierByWeightedScore(newWeightedScore);
+  console.log("New Tier:", newTier);
   if (!newTier) {
     console.warn("No tier matched the weighted score:", newWeightedScore);
-    return null;
   }
 
-  const shouldUpdate = !studentAchievement || newTier.id !== studentAchievement.tierId;
+  const shouldUpdate = !studentAchievement || newTier.id == studentAchievement.tierId;
 
 
   if (shouldUpdate) {

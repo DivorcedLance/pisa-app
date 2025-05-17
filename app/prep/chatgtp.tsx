@@ -5,6 +5,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 import { ChatCompletionMessageParam } from 'openai/resources';
 import openai from '@/lib/chatgtp/chatgtpUtils';
+import { Stack } from 'expo-router';
 
 const ChatGPT = () => {
     const scrollViewRef = useRef<ScrollView>(null);
@@ -36,7 +37,7 @@ const ChatGPT = () => {
             return {
                 role: role, // 'user' o 'assistant'
                 content: msg.text, // El contenido del mensaje
-                
+
             };
         });
 
@@ -94,45 +95,53 @@ const ChatGPT = () => {
     }, [isLoading]);
 
     return (
-        <View className="flex flex-col flex-1 bg-[#1B1E1A] justify-center items-center w-full px-2">
-            <ScrollView ref={scrollViewRef} className="w-full">
-                <View>
-                    <View className="py-4">
-                        {
-                            // Agrega un mensaje con cada consulta
-                            messages.map((message, index) => (
-                                <View key={index}
-                                className={`flex items-center justify-center text-white h-auto 
-                                    ${message.user ? 'self-end rounded-lg rounded-br-none bg-[#0077A1] p-2 max-w-[70%] mb-4' : 
-                                                     'self-start rounded-lg rounded-bl-none bg-[#535353] p-2 max-w-[85%] mb-4'}`}
-                                >
-                                    <MarkdownRenderer content={message.text} />
-                                </View>
-                            ))}
-                    </View>
-                </View>
-                {isLoading && (
+        <>
+            <Stack.Screen
+                options={{
+                    title: 'Asistente Virtual',
+                    headerTitleStyle: { fontSize: 18 } // Estilos personalizados
+                }}
+            />
+            <View className="flex-1 flex-col bg-[#1B1E1A] justify-center items-center w-full px-2 pb-24">
+                <ScrollView ref={scrollViewRef} className="w-full">
                     <View>
-                        {/* Usar un ActivityIndicator para mostrar el spinner */}
-                        <ActivityIndicator size="large" color={'#535353'} />
+                        <View className="py-4">
+                            {
+                                // Agrega un mensaje con cada consulta
+                                messages.map((message, index) => (
+                                    <View key={index}
+                                        className={`flex items-center justify-center text-white h-auto 
+                                        ${message.user ? 'self-end rounded-lg rounded-br-none bg-[#0077A1] p-2 max-w-[70%] mb-4' :
+                                                'self-start rounded-lg rounded-bl-none bg-[#535353] p-2 max-w-[85%] mb-4'}`}
+                                    >
+                                        <MarkdownRenderer content={message.text} />
+                                    </View>
+                                ))}
+                        </View>
                     </View>
-                )}
-            </ScrollView>
+                    {isLoading && (
+                        <View>
+                            {/* Usar un ActivityIndicator para mostrar el spinner */}
+                            <ActivityIndicator size="large" color={'#535353'} />
+                        </View>
+                    )}
+                </ScrollView>
 
-            <Animated.View style={[styles.consultContainer, { opacity: inputOpacity, height: inputHeight }]}>
-                <TextInput
-                    value={input}
-                    onChangeText={setInput}
-                    className="p-2 text-left text-white font-semibold w-[90%] mr-2"
-                    placeholderTextColor={'#b2b2b2'}
-                    placeholder="Escriba su consulta..."
-                    editable={!isLoading}
-                />
-                <TouchableOpacity className="flex justify-center items-center w-5 text-center mr-1" onPress={isLoading ? undefined : sendMessage}>
-                    <Ionicons name='send-outline' size={20} color='white' />
-                </TouchableOpacity>
-            </Animated.View>
-        </View>
+                <Animated.View style={[styles.consultContainer, { opacity: inputOpacity, height: inputHeight }]}>
+                    <TextInput
+                        value={input}
+                        onChangeText={setInput}
+                        className="p-2 text-left text-white font-semibold w-[90%] mr-2"
+                        placeholderTextColor={'#b2b2b2'}
+                        placeholder="Escriba su consulta..."
+                        editable={!isLoading}
+                    />
+                    <TouchableOpacity className="flex justify-center items-center w-5 text-center mr-1" onPress={isLoading ? undefined : sendMessage}>
+                        <Ionicons name='send-outline' size={20} color='white' />
+                    </TouchableOpacity>
+                </Animated.View>
+            </View>
+        </>
     );
 };
 
@@ -157,7 +166,7 @@ const styles = StyleSheet.create({
     textInput: {
         padding: 10,
         textAlign: 'left',
-        color:'#ffffff',
+        color: '#ffffff',
         fontWeight: '600',
         width: '90%',
         marginEnd: 10

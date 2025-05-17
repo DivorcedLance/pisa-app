@@ -241,7 +241,12 @@ export async function updateStudentAchievement({
   };
 }
 
-export async function getTierByWeightedScore(newWeightedScore : number) { //arreglar
+export async function getTierByWeightedScore(newWeightedScore : number) { //aqui entra el score_decimal / 3
+  //ejm
+  // (1 + 0 + 0) / 3 = 0.33
+  // (0.5 + 0.6 + 0) / 3 = 0.37
+  // (1 + 1 + 0) / 3 = 0.67
+  // (1 + 1 + 1) / 3 = 1.0
   //obtener TODOS los registros de Tier
   console.log("Entrando a getTierByWeightedScore")
   const tierRef = collection(db, "Tier");
@@ -252,24 +257,110 @@ export async function getTierByWeightedScore(newWeightedScore : number) { //arre
       spriteImgLink: doc.data().spriteImgLink,
     }));
 
-  let tier = null;
+  let tier :{
+    id: string;
+    name: string;
+    spriteImgLink: string;
+  } = {
+    id: "",
+    name: "",
+    spriteImgLink: "",
+  };
 
   if (newWeightedScore < 0.33) {
-    tier = null; // No obtiene tier
+    tier = {
+      id: "0",
+      name: "Ninguno",
+      spriteImgLink: "https://example.com/default.png", // Cambia esto por la URL de la imagen por defecto
+    }
   } else if (newWeightedScore >= 0.33 && newWeightedScore < 0.5) {
-    tier = tiers.find((t) => t.name === "Bronce");
+    tier = tiers.find((t) => t.name === "Bronce") as {
+      id: string;
+      name: string;
+      spriteImgLink: string;
+    }
   } else if (newWeightedScore >= 0.5 && newWeightedScore < 0.67) {
-    tier = tiers.find((t) => t.name === "Plata");
+    tier = tiers.find((t) => t.name === "Plata") as {
+      id: string;
+      name: string;
+      spriteImgLink: string;
+    }
   } else if (newWeightedScore >= 0.67 && newWeightedScore < 0.85) {
-    tier = tiers.find((t) => t.name === "Oro");
+    tier = tiers.find((t) => t.name === "Oro") as {
+      id: string;
+      name: string;
+      spriteImgLink: string;
+    }
   } else if (newWeightedScore >= 0.85 && newWeightedScore < 1) {
-    tier = tiers.find((t) => t.name === "Diamante");
+    tier = tiers.find((t) => t.name === "Diamante") as {
+      id: string;
+      name: string;
+      spriteImgLink: string;
+    }
   } else if (newWeightedScore >= 1) {
-    tier = tiers.find((t) => t.name === "Obsidiana");
+    tier = tiers.find((t) => t.name === "Obsidiana") as {
+      id: string;
+      name: string;
+      spriteImgLink: string;
+    }
   }
   
 
   return tier;
 
 
+}
+
+export async function getStudentAchievementByStudentId(studentId: string) {
+  console.log("Entrando a getStudentAchievementByStudentId");
+
+  const studentAchievementRef = collection(db, "StudentAchievement");
+  const q = query(studentAchievementRef, where("studentId", "==", studentId));
+  const querySnap = await getDocs(q);
+
+  if (querySnap.empty) {
+    return [];
+  }
+
+  const achievements = await Promise.all(querySnap.docs.map(async (docSnap) => {
+    const data = docSnap.data();
+    // Obtener el logro asociado
+    const achievementRef = doc(db, "Achievement", data.achievementId);
+    const achievementSnap = await getDoc(achievementRef);
+
+    // Obtener el tier asociado
+    const tierRef = doc(db, "Tier", data.tierId);
+    const tierSnap = await getDoc(tierRef);
+
+    if (!tierSnap.exists()) {
+      throw new Error(`Tier with ID ${data.tierId} does not exist.`);
+    }
+    if (!achievementSnap.exists()) {
+      throw new Error(`Achievement with ID ${data.achievementId} does not exist.`);
+    }
+    const achievementData = achievementSnap.data();
+
+    const tierData = tierSnap.data();
+
+    // Formatear la fecha
+    const dateObj = data.date.toDate();
+    const formattedDate = `${dateObj.getDate().toString().padStart(2, '0')}-${(dateObj.getMonth() + 1).toString().padStart(2, '0')}-${dateObj.getFullYear()}`;
+
+    return {
+      id: docSnap.id,
+      studentId: data.studentId,
+      achievementId: data.achievementId,
+      date: formattedDate,
+      currentProgress: data.currentProgress,
+      tierId: data.tierId,
+      tierName: tierData.name,
+      spriteImgLink: tierData.spriteImgLink,
+      courseId: achievementData.courseId,
+      description: achievementData.description,
+      name: achievementData.name,
+    };
+  }));
+
+  console.log("Achievements:", achievements);
+  return achievements;
 }

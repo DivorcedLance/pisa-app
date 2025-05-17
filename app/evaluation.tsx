@@ -1,6 +1,6 @@
-import { View, Text, Pressable, Image, ActivityIndicator } from "react-native";
+import { View, Text, Pressable, Image, ActivityIndicator, ScrollView } from "react-native";
 import { useCourseStore } from "@/stores/courseStore";
-import { router } from "expo-router";
+import { router, Stack } from "expo-router";
 import { useEffect, useState } from "react";
 import { useEvaluationStore } from "@/stores/evaluationStore";
 import { useAuthStore } from "@/stores/authStore";
@@ -16,7 +16,7 @@ export default function EvaluationScreen() {
 
   useEffect(() => {
     const loadEvaluation = async () => {
-      if (!selectedTopic)  return 
+      if (!selectedTopic) return
 
       try {
         setEvaluationIds((selectedTopic.evaluations!.sort(
@@ -53,27 +53,41 @@ export default function EvaluationScreen() {
   }
 
   return (
-    <View className="flex-1 bg-[#1B1E1A] p-6">
-      <View className={`flex-row p-2 pl-5 bg-[${selectedCourse?.color}] w-3/6 -inset-x-6`} 
-      style={{ borderTopRightRadius: 10, borderBottomRightRadius: 10 }}
-      >
-        <Text
-          className="text-white text-3xl font-bold"
-          style={{
-            color: "white",
-            textShadowColor: "black",
-            textShadowOffset: { width: 1, height: 1 },
-            textShadowRadius: 2,
+    <>
+      <Stack.Screen
+        options={{
+          title: 'Evaluación',
+          headerTitleStyle: { fontSize: 18 } // Estilos personalizados
+        }}
+      />
+      <View className="flex-1 bg-[#1B1E1A]">
+        <ScrollView
+          contentContainerStyle={{
+            padding: 24,
+            paddingBottom: 100 // Espacio extra para que los botones sean visibles
           }}
         >
-          {selectedCourse?.name}
-        </Text>
+          <View className={`flex-row p-2 pl-5 bg-[${selectedCourse?.color}] w-3/6 -inset-x-6`}
+            style={{ borderTopRightRadius: 10, borderBottomRightRadius: 10 }}
+          >
+            <Text
+              className="text-white text-3xl font-bold"
+              style={{
+                color: "white",
+                textShadowColor: "black",
+                textShadowOffset: { width: 1, height: 1 },
+                textShadowRadius: 2,
+              }}
+            >
+              {selectedCourse?.name}
+            </Text>
+          </View>
+
+          {(selectedEvaluation && user) ?
+            <EvaluationDisplay evaluation={selectedEvaluation} studentId={user.id} />
+            : null}
+        </ScrollView>
       </View>
-
-      {(selectedEvaluation && user) ? 
-        <EvaluationDisplay evaluation={selectedEvaluation} studentId={user.id} /> 
-      : null}
-
-    </View>
+    </>
   );
 }

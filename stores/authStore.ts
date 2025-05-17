@@ -17,7 +17,7 @@ interface AuthState {
     documentType: string;
     documentNumber: string;
     birthDate: Date;
-    type: "student" | "teacher";
+    type: "student" | "teacher" | "admin";
   }) => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -42,14 +42,14 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       const userCredential = await signInWithEmailAndPassword(auth, user.email, password);
-      const fullUserData = await getUserDataByEmail(userCredential.user.email!);
-      set({ user: fullUserData, isLoading: false });
-
-      const streak = await updateStreak(fullUserData?.id!);
+      const streak = await updateStreak(user.email);
       if (!streak) {
         throw new Error("Error al actualizar la racha.");
       }
-    console.log("Racha actual:", streak);
+      console.log("Racha actual:", streak);
+      const fullUserData = await getUserDataByEmail(userCredential.user.email!);
+      set({ user: fullUserData, isLoading: false });
+
     } catch (error: any) {
       set({ error: error.message, isLoading: false });
       throw error;
@@ -65,7 +65,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     documentType: string;
     documentNumber: string;
     birthDate: Date;
-    type: "student" | "teacher";
+    type: "student" | "teacher" | "admin";
   }) => {
     set({ isLoading: true, error: null });
     try {
@@ -75,7 +75,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         ...userdata,
         email,
       };
-      
+
       if (userdata.type === "student") {
         const createdStudent = await createStudent({
           email,
@@ -105,7 +105,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           throw new Error("Error al crear el profesor.");
         }
       }
-      
+
       const fullUserData = await getUserDataByEmail(userCredential.user.email!);
       set({ user: fullUserData, isLoading: false });
     } catch (error: any) {
